@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 /*
- * VOKVE — spatial design system.
+ * VOKVE — the morning walk.
  *
- * The page is a room: a deep environment lit by two warm lights (the brand's
- * red and orange) and one cool one, with every surface a sheet of frosted
- * glass floating in it at its own depth. Three materials do all the work:
+ * Warm paper-toned neutrals, the app icon's flat signal red as the one
+ * accent, and brass only on the coin. Depth comes from surface steps and
+ * hairlines; nothing glows and nothing floats. The colour lives in the few
+ * places that show the product: the step ring, the day chart and the coin.
  *
- *   .glass          a window — the main surface for content
- *   .glass-ornament a thicker pill that floats above windows (nav, chips)
- *   .well           a recessed area cut into a window (inputs, insets)
- *
- * Depth is carried by shadow, a specular top edge, and — where the pointer
- * is fine and motion is welcome — tilt and parallax. Everything degrades to
- * flat, readable panels: reduced motion, print, and no backdrop-filter.
+ *   .card          a raised surface for content
+ *   .well          an inset area inside a card
+ *   .chip          small quiet meta: a date, a count, a cadence
+ *   .icon-box      a neutral square that holds a line icon
+ *   .btn           44px buttons: .btn-primary, .btn-secondary; .btn-lg 48px, .btn-sm 36px
+ *   .section-label the short section name above a heading
+ *   .day-line      the signature: one day as a mono line with its status dot
  */
 
 /* `dark:` follows the system unless the visitor picked a theme. */
@@ -32,159 +33,95 @@
 
 :root {
   color-scheme: light;
-  --bg: #e9ecf3;
-  --bg-deep: #dfe3ec;
-  --ink: #0a0f1c;
-  --ink-2: rgb(15 23 42 / 0.72);
-  --ink-3: rgb(15 23 42 / 0.5);
-  --hairline: rgb(15 23 42 / 0.09);
+  --bg: #f7f4ee;
+  --surface: #fdfbf7;
+  --raised: #efe9df;
+  --ink: #1f1b16;
+  --ink-2: #5e554a;
+  --ink-3: #7b7266;
+  --hairline: rgb(31 27 22 / 0.1);
 
-  --glass-top: rgb(255 255 255 / 0.78);
-  --glass-bottom: rgb(255 255 255 / 0.5);
-  --glass-stroke: rgb(255 255 255 / 0.85);
-  --glass-edge: rgb(15 23 42 / 0.07);
-  --glass-sheen: rgb(255 255 255 / 0.95);
-  --glass-blur: 28px;
-  --glass-shadow:
-    0 1px 1px rgb(15 23 42 / 0.04),
-    0 14px 28px -14px rgb(15 23 42 / 0.16),
-    0 44px 90px -44px rgb(15 23 42 / 0.32);
-  --glass-shadow-lift:
-    0 2px 2px rgb(15 23 42 / 0.04),
-    0 22px 40px -16px rgb(15 23 42 / 0.22),
-    0 70px 120px -50px rgb(15 23 42 / 0.4);
-  --ornament-top: rgb(255 255 255 / 0.82);
-  --ornament-bottom: rgb(255 255 255 / 0.66);
-  --well: rgb(15 23 42 / 0.045);
-  --well-stroke: rgb(15 23 42 / 0.07);
-  --specular: rgb(255 255 255 / 0.7);
-
+  /* The app icon's red. White on it is 4.8 : 1. */
   --brand: #e50000;
-  --brand-2: #ff4005;
-  --brand-ink: #c00000;
-  --accent: #4f46e5;
-  --gold: #b7800a;
-  --green: #059669;
+  --brand-ink: #c40000;
+  --primary: var(--brand);
+  --primary-ink: #ffffff;
+  --primary-hover: #c80000;
 
-  --orb-a: rgb(255 64 5 / 0.3);
-  --orb-b: rgb(229 0 0 / 0.2);
-  --orb-c: rgb(99 102 241 / 0.24);
-  --orb-d: rgb(14 165 233 / 0.18);
-  --grid-line: rgb(15 23 42 / 0.055);
-  --noise-opacity: 0.04;
+  --positive: #1d7a46;
+  --pending: #a75f05;
+  --bar: rgb(31 27 22 / 0.14);
+
+  --shadow-sm: 0 1px 2px rgb(31 27 22 / 0.05);
+  --float-shadow: 0 1px 2px rgb(31 27 22 / 0.05), 0 12px 32px rgb(31 27 22 / 0.08);
+  --coin-shadow: rgb(31 27 22 / 0.28);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #05060b;
-    --bg-deep: #000000;
-    --ink: #f4f6fb;
-    --ink-2: rgb(226 232 255 / 0.74);
-    --ink-3: rgb(226 232 255 / 0.5);
-    --hairline: rgb(255 255 255 / 0.09);
-    --glass-top: rgb(255 255 255 / 0.105);
-    --glass-bottom: rgb(255 255 255 / 0.04);
-    --glass-stroke: rgb(255 255 255 / 0.13);
-    --glass-edge: rgb(0 0 0 / 0.45);
-    --glass-sheen: rgb(255 255 255 / 0.4);
-    --glass-shadow:
-      0 1px 1px rgb(0 0 0 / 0.3),
-      0 20px 40px -20px rgb(0 0 0 / 0.65),
-      0 60px 120px -40px rgb(0 0 0 / 0.75);
-    --glass-shadow-lift:
-      0 2px 2px rgb(0 0 0 / 0.3),
-      0 30px 60px -22px rgb(0 0 0 / 0.75),
-      0 90px 160px -50px rgb(0 0 0 / 0.85);
-    --ornament-top: rgb(40 42 54 / 0.72);
-    --ornament-bottom: rgb(22 23 32 / 0.7);
-    --well: rgb(0 0 0 / 0.26);
-    --well-stroke: rgb(255 255 255 / 0.06);
-    --specular: rgb(255 255 255 / 0.16);
-    --brand: #ff2b2b;
-    --brand-2: #ff6a2b;
-    --brand-ink: #ff6b6b;
-    --accent: #8b93ff;
-    --gold: #f5c451;
-    --green: #34d399;
-    --orb-a: rgb(255 64 5 / 0.3);
-    --orb-b: rgb(229 0 0 / 0.32);
-    --orb-c: rgb(99 102 241 / 0.28);
-    --orb-d: rgb(14 165 233 / 0.14);
-    --grid-line: rgb(255 255 255 / 0.045);
-    --noise-opacity: 0.06;
+    --bg: #161513;
+    --surface: #1c1a18;
+    --raised: #262421;
+    --ink: #efe9de;
+    --ink-2: #aaa398;
+    --ink-3: #8a847a;
+    --hairline: rgb(239 233 222 / 0.11);
+    --brand: #f2281b;
+    --brand-ink: #ff7a6b;
+    --primary: #efe9de;
+    --primary-ink: #161513;
+    --primary-hover: #ffffff;
+    --positive: #4cc38a;
+    --pending: #e0a23a;
+    --bar: rgb(239 233 222 / 0.16);
+    --shadow-sm: none;
+    --float-shadow: 0 16px 40px rgb(0 0 0 / 0.35);
+    --coin-shadow: rgb(0 0 0 / 0.55);
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #05060b;
-  --bg-deep: #000000;
-  --ink: #f4f6fb;
-  --ink-2: rgb(226 232 255 / 0.74);
-  --ink-3: rgb(226 232 255 / 0.5);
-  --hairline: rgb(255 255 255 / 0.09);
-  --glass-top: rgb(255 255 255 / 0.105);
-  --glass-bottom: rgb(255 255 255 / 0.04);
-  --glass-stroke: rgb(255 255 255 / 0.13);
-  --glass-edge: rgb(0 0 0 / 0.45);
-  --glass-sheen: rgb(255 255 255 / 0.4);
-  --glass-shadow:
-    0 1px 1px rgb(0 0 0 / 0.3),
-    0 20px 40px -20px rgb(0 0 0 / 0.65),
-    0 60px 120px -40px rgb(0 0 0 / 0.75);
-  --glass-shadow-lift:
-    0 2px 2px rgb(0 0 0 / 0.3),
-    0 30px 60px -22px rgb(0 0 0 / 0.75),
-    0 90px 160px -50px rgb(0 0 0 / 0.85);
-  --ornament-top: rgb(40 42 54 / 0.72);
-  --ornament-bottom: rgb(22 23 32 / 0.7);
-  --well: rgb(0 0 0 / 0.26);
-  --well-stroke: rgb(255 255 255 / 0.06);
-  --specular: rgb(255 255 255 / 0.16);
-  --brand: #ff2b2b;
-  --brand-2: #ff6a2b;
-  --brand-ink: #ff6b6b;
-  --accent: #8b93ff;
-  --gold: #f5c451;
-  --green: #34d399;
-  --orb-a: rgb(255 64 5 / 0.3);
-  --orb-b: rgb(229 0 0 / 0.32);
-  --orb-c: rgb(99 102 241 / 0.28);
-  --orb-d: rgb(14 165 233 / 0.14);
-  --grid-line: rgb(255 255 255 / 0.045);
-  --noise-opacity: 0.06;
+  --bg: #161513;
+  --surface: #1c1a18;
+  --raised: #262421;
+  --ink: #efe9de;
+  --ink-2: #aaa398;
+  --ink-3: #8a847a;
+  --hairline: rgb(239 233 222 / 0.11);
+  --brand: #f2281b;
+  --brand-ink: #ff7a6b;
+  --primary: #efe9de;
+  --primary-ink: #161513;
+  --primary-hover: #ffffff;
+  --positive: #4cc38a;
+  --pending: #e0a23a;
+  --bar: rgb(239 233 222 / 0.16);
+  --shadow-sm: none;
+  --float-shadow: 0 16px 40px rgb(0 0 0 / 0.35);
+  --coin-shadow: rgb(0 0 0 / 0.55);
 }
-
-/* Tone families a tile can glow in (`data-tone`), shared by both themes. */
-[data-tone] {
-  --tone: var(--brand);
-}
-[data-tone="orange"] { --tone: var(--brand-2); }
-[data-tone="blue"] { --tone: #3b82f6; }
-[data-tone="violet"] { --tone: #7c6cff; }
-[data-tone="gold"] { --tone: #f2a900; }
-[data-tone="green"] { --tone: #10b981; }
-[data-tone="cyan"] { --tone: #06b6d4; }
-[data-tone="pink"] { --tone: #ec4899; }
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
   --color-hairline: var(--hairline);
   --color-brand: var(--brand);
-  --color-brand-2: var(--brand-2);
   --color-brand-ink: var(--brand-ink);
-  --color-accent: var(--accent);
-  --color-gold: var(--gold);
-  --color-green: var(--green);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --radius-window: 2rem;
-  --radius-panel: 1.5rem;
-  --ease-spatial: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --color-positive: var(--positive);
+  --color-pending: var(--pending);
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+  --radius-panel: 1.25rem;
+  --shadow-float: var(--float-shadow);
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────── */
@@ -193,37 +130,43 @@
   html {
     background: var(--bg);
     scroll-behavior: smooth;
-    scroll-padding-top: 7rem;
+    scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
   }
-  /* The body stays clear: the fixed environment sits at z-index -10 inside the
-     root stacking context, and a body background would paint over it. */
   body {
     min-height: 100dvh;
-    background: transparent;
+    background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
   }
   ::selection {
-    background: color-mix(in oklab, var(--brand) 30%, transparent);
+    background: color-mix(in oklab, var(--brand) 22%, transparent);
   }
   :focus-visible {
-    outline: 2px solid color-mix(in oklab, var(--brand) 80%, white);
-    outline-offset: 3px;
-    border-radius: 0.75rem;
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
   }
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
-    letter-spacing: -0.03em;
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 500;
     text-wrap: balance;
+  }
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
   }
   p {
     text-wrap: pretty;
+  }
+  /* One stroke for every line icon on the site. */
+  svg.lucide {
+    stroke-width: 1.5;
   }
 }
 
@@ -233,240 +176,143 @@
   }
 }
 
-/* ─── Materials ──────────────────────────────────────────────────────────── */
+/* ─── Components ─────────────────────────────────────────────────────────── */
 
 @layer components {
-  .glass,
-  .glass-ornament {
+  .card {
     position: relative;
-    isolation: isolate;
-    background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(170%);
-    backdrop-filter: blur(var(--glass-blur)) saturate(170%);
+    background: var(--surface);
+    border-radius: var(--radius-card);
     box-shadow:
-      var(--glass-shadow),
-      inset 0 1px 0 0 var(--glass-sheen),
-      inset 0 0 0 1px var(--glass-stroke),
-      0 0 0 1px var(--glass-edge);
-    border-radius: var(--radius-window);
-  }
-
-  /* The lit edge: brightest at the top-left, where the room's light falls. */
-  .glass::before,
-  .glass-ornament::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      155deg,
-      var(--specular) 0%,
-      transparent 32%,
-      transparent 68%,
-      color-mix(in oklab, var(--specular) 50%, transparent) 100%
-    );
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box exclude,
-      linear-gradient(#000 0 0);
-    pointer-events: none;
-  }
-
-  .glass-ornament {
-    background: linear-gradient(180deg, var(--ornament-top), var(--ornament-bottom));
-    -webkit-backdrop-filter: blur(36px) saturate(180%);
-    backdrop-filter: blur(36px) saturate(180%);
-    border-radius: 9999px;
+      inset 0 0 0 1px var(--hairline),
+      var(--shadow-sm);
   }
 
   .well {
-    background: var(--well);
-    box-shadow:
-      inset 0 1px 2px rgb(0 0 0 / 0.08),
-      inset 0 0 0 1px var(--well-stroke);
-    border-radius: var(--radius-panel);
-  }
-
-  /* A light that follows the pointer across a surface (set by PointerLight). */
-  [data-specular]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    border-radius: inherit;
-    pointer-events: none;
-    background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, -30%),
-      var(--specular),
-      transparent 60%
-    );
-    opacity: 0;
-    transition: opacity 0.4s var(--ease-spatial);
-    mix-blend-mode: soft-light;
-  }
-  [data-specular]:hover::after {
-    opacity: 1;
-  }
-
-  /* Hover depth: the surface comes toward you. Tilt angles come from PointerLight. */
-  .lift {
-    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-    transition:
-      transform 0.6s var(--ease-spatial),
-      box-shadow 0.6s var(--ease-spatial);
-    will-change: transform;
-  }
-  .lift:hover {
-    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))
-      translateZ(18px);
-    box-shadow:
-      var(--glass-shadow-lift),
-      inset 0 1px 0 0 var(--glass-sheen),
-      inset 0 0 0 1px var(--glass-stroke),
-      0 0 0 1px var(--glass-edge);
-  }
-
-  /* A glossy tile that holds an icon, lit in its tone. */
-  .icon-orb {
-    --size: 3rem;
-    position: relative;
-    display: inline-grid;
-    place-items: center;
-    width: var(--size);
-    height: var(--size);
-    flex: none;
-    border-radius: calc(var(--size) * 0.32);
-    color: white;
-    background:
-      radial-gradient(120% 120% at 30% 15%, color-mix(in oklab, var(--tone) 55%, white) 0%, transparent 55%),
-      linear-gradient(160deg, color-mix(in oklab, var(--tone) 92%, white), color-mix(in oklab, var(--tone) 80%, black));
-    box-shadow:
-      0 12px 24px -10px color-mix(in oklab, var(--tone) 75%, transparent),
-      inset 0 1px 0 rgb(255 255 255 / 0.55),
-      inset 0 -6px 12px -6px rgb(0 0 0 / 0.25);
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.875rem 0.375rem 0.625rem;
-    border-radius: 9999px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--ink-2);
-    background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
-    box-shadow:
-      inset 0 1px 0 var(--glass-sheen),
-      inset 0 0 0 1px var(--glass-stroke),
-      0 0 0 1px var(--glass-edge),
-      0 8px 20px -12px rgb(0 0 0 / 0.3);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-  }
-  .eyebrow::before {
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, var(--brand-2), var(--brand));
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 22%, transparent), 0 0 12px var(--brand);
-  }
-
-  .text-gradient-brand {
-    background: linear-gradient(100deg, var(--brand) 10%, var(--brand-2) 60%, #ffb26b 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .text-gradient-ink {
-    background: linear-gradient(180deg, var(--ink) 30%, color-mix(in oklab, var(--ink) 62%, transparent));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* Buttons */
-  .btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    height: 3rem;
-    padding: 0 1.375rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    letter-spacing: -0.005em;
-    white-space: nowrap;
-    transition:
-      transform 0.4s var(--ease-spatial),
-      box-shadow 0.4s var(--ease-spatial),
-      background-color 0.3s;
-  }
-  .btn:active {
-    transform: scale(0.97);
-  }
-  .btn-sm {
-    height: 2.5rem;
-    padding: 0 1rem;
-    font-size: 0.875rem;
-  }
-  .btn-primary {
-    color: white;
-    background:
-      linear-gradient(180deg, rgb(255 255 255 / 0.22), transparent 55%),
-      linear-gradient(100deg, var(--brand), var(--brand-2));
-    box-shadow:
-      0 14px 30px -12px color-mix(in oklab, var(--brand) 80%, transparent),
-      inset 0 1px 0 rgb(255 255 255 / 0.45),
-      inset 0 -2px 6px rgb(0 0 0 / 0.15);
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 22px 40px -14px color-mix(in oklab, var(--brand) 90%, transparent),
-      inset 0 1px 0 rgb(255 255 255 / 0.5),
-      inset 0 -2px 6px rgb(0 0 0 / 0.15);
-  }
-  .btn-glass {
-    color: var(--ink);
-    background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    backdrop-filter: blur(24px) saturate(170%);
-    box-shadow:
-      inset 0 1px 0 var(--glass-sheen),
-      inset 0 0 0 1px var(--glass-stroke),
-      0 0 0 1px var(--glass-edge),
-      0 12px 26px -14px rgb(0 0 0 / 0.4);
-  }
-  .btn-glass:hover {
-    transform: translateY(-2px);
+    background: var(--raised);
+    border-radius: var(--radius-control);
   }
 
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.25rem 0.625rem;
-    border-radius: 9999px;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    border-radius: 0.375rem;
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 600;
+    line-height: 1rem;
     color: var(--ink-2);
-    background: var(--well);
-    box-shadow: inset 0 0 0 1px var(--well-stroke);
+    background: var(--raised);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .icon-box {
+    --size: 2.5rem;
+    display: inline-grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    flex: none;
+    border-radius: var(--radius-control);
+    color: var(--ink-2);
+    background: var(--raised);
+  }
+
+  .section-label {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: var(--ink-3);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: var(--radius-control);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 160ms var(--ease-standard),
+      color 160ms var(--ease-standard),
+      box-shadow 160ms var(--ease-standard),
+      transform 160ms var(--ease-standard);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn-lg {
+    height: 3rem;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+  }
+  .btn-sm {
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+  }
+  .btn-primary {
+    color: var(--primary-ink);
+    background: var(--primary);
+  }
+  .btn-primary:hover {
+    background: var(--primary-hover);
+  }
+  .btn-secondary {
+    color: var(--ink);
+    background: var(--surface);
+    box-shadow:
+      inset 0 0 0 1px var(--hairline),
+      var(--shadow-sm);
+  }
+  .btn-secondary:hover {
+    background: var(--raised);
+  }
+
+  /* The signature: a day, written the way the wallet writes it. */
+  .day-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: none;
+    border-radius: 9999px;
+    background: var(--ink-3);
+  }
+  .status-dot[data-state="pending"] {
+    background: var(--pending);
+  }
+  .status-dot[data-state="paid"] {
+    background: var(--positive);
   }
 
   .section {
     position: relative;
-    padding-block: clamp(4.5rem, 9vw, 8rem);
+    padding-block: 5rem;
+  }
+  @media (min-width: 1024px) {
+    .section {
+      padding-block: 7.5rem;
+    }
   }
   .container-x {
     width: 100%;
@@ -479,8 +325,13 @@
       padding-inline: 1.5rem;
     }
   }
+  @media (min-width: 1024px) {
+    .container-x {
+      padding-inline: 2rem;
+    }
+  }
 
-  /* Native accordion with a little depth when open. */
+  /* Native accordion: the chevron turns; the answer simply appears. */
   .disclosure > summary {
     list-style: none;
     cursor: pointer;
@@ -489,157 +340,33 @@
     display: none;
   }
   .disclosure .disclosure-chevron {
-    transition: transform 0.4s var(--ease-spatial);
+    transition: transform 180ms var(--ease-standard);
   }
   .disclosure[open] .disclosure-chevron {
     transform: rotate(180deg);
   }
-  .disclosure::details-content {
-    block-size: 0;
-    overflow: clip;
-    transition:
-      block-size 0.45s var(--ease-spatial),
-      content-visibility 0.45s allow-discrete;
+}
+
+/* ─── Motion: one entrance, one ring ─────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 480ms var(--ease-standard) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
   }
-  .disclosure[open]::details-content {
-    block-size: auto;
-  }
-}
-
-/* Opening `<details>` smoothly needs keyword sizes to interpolate. */
-:root {
-  interpolate-size: allow-keywords;
-}
-
-/* ─── Environment ────────────────────────────────────────────────────────── */
-
-.environment {
-  position: fixed;
-  inset: 0;
-  z-index: -10;
-  overflow: hidden;
-  pointer-events: none;
-  background: radial-gradient(120% 90% at 50% -10%, var(--bg) 0%, var(--bg) 55%, var(--bg-deep) 100%);
-}
-.orb {
-  position: absolute;
-  border-radius: 9999px;
-  will-change: transform;
-}
-.orb-a {
-  width: 60vmax;
-  height: 60vmax;
-  left: -18vmax;
-  top: -26vmax;
-  background: radial-gradient(closest-side, var(--orb-a), transparent);
-  animation: drift-a 26s ease-in-out infinite alternate;
-}
-.orb-b {
-  width: 50vmax;
-  height: 50vmax;
-  right: -16vmax;
-  top: 8vmax;
-  background: radial-gradient(closest-side, var(--orb-b), transparent);
-  animation: drift-b 32s ease-in-out infinite alternate;
-}
-.orb-c {
-  width: 56vmax;
-  height: 56vmax;
-  left: 18vmax;
-  bottom: -34vmax;
-  background: radial-gradient(closest-side, var(--orb-c), transparent);
-  animation: drift-c 38s ease-in-out infinite alternate;
-}
-.orb-d {
-  width: 34vmax;
-  height: 34vmax;
-  left: -10vmax;
-  bottom: 4vmax;
-  background: radial-gradient(closest-side, var(--orb-d), transparent);
-  animation: drift-b 44s ease-in-out infinite alternate-reverse;
-}
-.environment-grid {
-  position: absolute;
-  inset: -2px;
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(70% 55% at 50% 30%, #000 20%, transparent 75%);
-}
-.environment-noise {
-  position: absolute;
-  inset: 0;
-  opacity: var(--noise-opacity);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-
-@keyframes drift-a {
-  to { transform: translate3d(8vmax, 6vmax, 0) scale(1.08); }
-}
-@keyframes drift-b {
-  to { transform: translate3d(-6vmax, 8vmax, 0) scale(0.94); }
-}
-@keyframes drift-c {
-  to { transform: translate3d(-10vmax, -6vmax, 0) scale(1.1); }
-}
-
-/* ─── 3D stage (hero, stacks) ────────────────────────────────────────────── */
-
-@property --float {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-.stage {
-  perspective: 1600px;
-  perspective-origin: 50% 40%;
-}
-.stage-inner {
-  position: relative;
-  transform-style: preserve-3d;
-  transform: rotateX(calc(var(--base-rx, 6deg) + var(--rx, 0deg)))
-    rotateY(calc(var(--base-ry, -14deg) + var(--ry, 0deg)));
-}
-.layer {
-  position: absolute;
-  transform: translate3d(0, var(--float), var(--z, 0px));
-}
-.floating {
-  animation: float 7s ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-}
-@keyframes float {
-  0%, 100% { --float: 0px; }
-  50% { --float: -14px; }
-}
-
-.ring-track {
-  stroke: var(--well-stroke);
-}
-
-/* ─── Scroll-driven reveal (progressive) ─────────────────────────────────── */
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: reveal-in linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 55%;
-    }
+  .ring-fill {
+    animation: ring-fill 1100ms var(--ease-standard) 240ms both;
   }
 }
-@keyframes reveal-in {
+@keyframes enter {
   from {
     opacity: 0;
-    translate: 0 56px;
-    scale: 0.94;
+    translate: 0 8px;
   }
-  to {
-    opacity: 1;
-    translate: 0 0;
-    scale: 1;
+}
+@keyframes ring-fill {
+  from {
+    stroke-dashoffset: var(--ring-length);
   }
 }
 
@@ -654,13 +381,6 @@
   }
 }
 
-/* A soft beam joining the steps of a sequence. */
-.beam {
-  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand) 70%, transparent), color-mix(in oklab, var(--brand-2) 70%, transparent), transparent);
-  filter: blur(0.5px);
-  box-shadow: 0 0 18px color-mix(in oklab, var(--brand) 60%, transparent);
-}
-
 /* ─── Legal prose ────────────────────────────────────────────────────────── */
 
 .prose-legal {
@@ -670,51 +390,28 @@
 }
 .prose-legal strong {
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 500;
 }
 .prose-legal a {
   color: var(--brand-ink);
-  font-weight: 500;
   text-decoration: underline;
-  text-decoration-color: color-mix(in oklab, var(--brand) 35%, transparent);
+  text-decoration-color: color-mix(in oklab, var(--brand-ink) 35%, transparent);
   text-underline-offset: 3px;
+  transition: text-decoration-color 160ms var(--ease-standard);
 }
 .prose-legal a:hover {
   text-decoration-color: currentColor;
 }
 
-/* ─── Motion and print fallbacks ─────────────────────────────────────────── */
-
-@media (prefers-reduced-motion: reduce) {
-  .orb,
-  .floating {
-    animation: none;
-  }
-  .lift,
-  .lift:hover {
-    transform: none;
-  }
-}
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass,
-  .glass-ornament,
-  .btn-glass,
-  .eyebrow {
-    background: color-mix(in oklab, var(--bg) 88%, white);
-  }
-}
+/* ─── Print ──────────────────────────────────────────────────────────────── */
 
 @media print {
-  .environment,
   .no-print {
     display: none !important;
   }
-  .glass,
-  .glass-ornament {
+  .card {
     background: white !important;
     box-shadow: none !important;
-    backdrop-filter: none !important;
     border: 1px solid #ddd;
   }
   body {

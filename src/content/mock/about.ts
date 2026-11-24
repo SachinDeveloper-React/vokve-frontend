@@ -10,13 +10,13 @@ export const aboutPage = {
   },
   hero: {
     eyebrow: 'About VOKVE',
-    title: 'We think a good habit should pay you back.',
+    title: 'We think a good habit should pay you back',
     subtitle:
       'VOKVE started with a simple question: millions of people walk every day, so why does none of it count for anything?',
   },
   story: {
     eyebrow: 'Our story',
-    title: 'Small steps, counted honestly.',
+    title: 'Small steps, counted honestly',
     paragraphs: [
       'Most fitness apps reward the people who are already fit. We wanted to reward everyone else too — the walk to the station, the evening lap of the colony, the stairs instead of the lift.',
       'So we built VOKVE around the one device everybody already carries. It counts your steps, checks that they are real, and turns them into coins you can spend on things you actually want.',
@@ -35,7 +35,7 @@ export const aboutPage = {
   ],
   values: {
     eyebrow: 'What we stand for',
-    title: 'Four promises we build against.',
+    title: 'Four promises we build against',
     subtitle: null,
     items: [
       {
@@ -66,7 +66,7 @@ export const aboutPage = {
   },
   milestones: {
     eyebrow: 'Along the way',
-    title: 'How VOKVE came together.',
+    title: 'How VOKVE came together',
     subtitle: null,
     items: [
       {
@@ -82,7 +82,7 @@ export const aboutPage = {
       {
         when: 'The shop',
         title: 'Rewards you can hold',
-        body: 'Coins became money off real products, with the split shown before you pay.',
+        body: 'Coins became real products from the VOKVE shop, with the total shown before you confirm.',
       },
       {
         when: 'Today',
@@ -93,7 +93,7 @@ export const aboutPage = {
   },
   team: null,
   cta: {
-    title: 'Come walk with us.',
+    title: 'Come walk with us',
     body: 'Download VOKVE and your next walk starts counting.',
     primary: { label: 'Get the app', href: '/#download' },
     secondary: { label: 'Talk to us', href: '/contact' },

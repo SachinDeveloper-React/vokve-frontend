@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Sora } from 'next/font/google';
-import { PointerLight } from '@/components/client/PointerLight';
-import { Environment, SiteFooter, SiteHeader } from '@/components/layout/Chrome';
+import { Geist_Mono, Instrument_Sans } from 'next/font/google';
+import { SiteFooter, SiteHeader } from '@/components/layout/Chrome';
 import { getSiteConfig } from '@/lib/content';
 import { THEME_STORAGE_KEY } from '@/lib/theme';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const sora = Sora({ subsets: ['latin'], variable: '--font-sora', display: 'swap', weight: ['500', '600', '700', '800'] });
+/** The interface face, at 400 and 500 (600 only for the wordmark). */
+const instrument = Instrument_Sans({ subsets: ['latin'], variable: '--font-instrument', display: 'swap' });
+/** Figures, dates, counts and the day line. */
+const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', display: 'swap' });
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteConfig();
@@ -30,8 +31,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#e9ecf3' },
-    { media: '(prefers-color-scheme: dark)', color: '#05060b' },
+    { media: '(prefers-color-scheme: light)', color: '#f7f4ee' },
+    { media: '(prefers-color-scheme: dark)', color: '#161513' },
   ],
   colorScheme: 'light dark',
 };
@@ -44,22 +45,20 @@ const themeScript = `(function(){try{var t=localStorage.getItem(${JSON.stringify
 export default async function RootLayout({ children }: LayoutProps<'/'>) {
   const site = await getSiteConfig();
   return (
-    <html lang="en-IN" className={`${inter.variable} ${sora.variable}`} suppressHydrationWarning>
+    <html lang="en-IN" className={`${instrument.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
         <a
           href="#main"
-          className="glass-ornament fixed left-4 top-4 z-[60] -translate-y-24 px-5 py-3 font-semibold text-ink focus:translate-y-0"
+          className="btn btn-secondary fixed top-3 left-3 z-[60] -translate-y-20 focus:translate-y-0"
         >
           {site.labels.skipToContent}
         </a>
-        <Environment />
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
-        <PointerLight />
       </body>
     </html>
   );

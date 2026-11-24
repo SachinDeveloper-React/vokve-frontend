@@ -47,8 +47,8 @@ export function FaqExplorer({
 
   return (
     <div>
-      <label className="glass flex h-16 items-center gap-3 rounded-full px-6">
-        <Search className="size-5 shrink-0 text-ink-3" aria-hidden="true" />
+      <label className="card flex h-12 items-center gap-3 rounded-control px-4 focus-within:shadow-[inset_0_0_0_1px_var(--ink-3)]">
+        <Search className="size-4.5 shrink-0 text-ink-3" aria-hidden="true" />
         <span className="sr-only">{labels.searchPlaceholder}</span>
         <input
           type="search"
@@ -59,44 +59,40 @@ export function FaqExplorer({
         />
       </label>
 
-      <div className="no-scrollbar max-sm:scroller-mask -mx-4 mt-5 flex gap-2 overflow-x-auto px-4 py-1 sm:mx-0 sm:flex-wrap sm:justify-center sm:overflow-visible sm:px-0" role="toolbar">
+      <div className="no-scrollbar max-sm:scroller-mask -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 py-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="toolbar">
         <FilterChip active={category === null} onClick={() => setCategory(null)}>
           {labels.allCategories}
-          <span className="text-ink-3">{items.filter(item => matches(item, words)).length}</span>
+          <span className="font-mono text-xs text-ink-3">{items.filter(item => matches(item, words)).length}</span>
         </FilterChip>
         {categories.map(c => (
           <FilterChip key={c.id} active={category === c.id} onClick={() => setCategory(category === c.id ? null : c.id)}>
             <span className="[&>svg]:size-4">{c.icon}</span>
             {c.title}
-            <span className="text-ink-3">{counts.get(c.id) ?? 0}</span>
+            <span className="font-mono text-xs text-ink-3">{counts.get(c.id) ?? 0}</span>
           </FilterChip>
         ))}
       </div>
 
       <div className="mt-10 space-y-12">
         {visible.length === 0 ? (
-          <p className="glass p-8 text-center text-ink-2">{labels.noResults}</p>
+          <p className="card p-8 text-center text-ink-2">{labels.noResults}</p>
         ) : (
           groups.map(group => (
             <section key={group.category?.id ?? 'results'} aria-label={group.category?.title}>
               {group.category ? (
-                <h2 className="mb-4 flex items-center gap-3 text-xl font-semibold text-ink">
-                  <span className="icon-orb [--size:2.25rem] [&>svg]:size-4" data-tone="brand">
-                    {group.category.icon}
-                  </span>
+                <h2 className="mb-4 flex items-center gap-3 text-xl text-ink">
+                  <span className="text-ink-3 [&>svg]:size-4.5">{group.category.icon}</span>
                   {group.category.title}
                 </h2>
               ) : null}
-              <div className="space-y-3">
+              <div className="card">
                 {group.items.map(item => (
-                  <details key={item.id} className="disclosure glass rounded-panel" name="faq">
-                    <summary className="flex items-center gap-4 px-5 py-4 sm:px-6 sm:py-5">
-                      <span className="flex-1 text-base font-semibold text-ink sm:text-lg">{item.question}</span>
-                      <span className="well grid size-8 shrink-0 place-items-center rounded-full">
-                        <ChevronDown className="disclosure-chevron size-4 text-ink-2" aria-hidden="true" />
-                      </span>
+                  <details key={item.id} className="disclosure border-t border-hairline first:border-t-0" name="faq">
+                    <summary className="flex items-center gap-4 rounded-card px-5 py-5 text-ink transition-colors hover:text-ink-2 sm:px-6">
+                      <span className="flex-1 text-base font-medium sm:text-[1.0625rem]">{item.question}</span>
+                      <ChevronDown className="disclosure-chevron size-4.5 shrink-0 text-ink-3" aria-hidden="true" />
                     </summary>
-                    <div className="px-5 pb-5 leading-relaxed text-ink-2 sm:px-6 sm:pb-6">{answers[item.id]}</div>
+                    <div className="max-w-prose px-5 pb-6 leading-relaxed text-ink-2 sm:px-6">{answers[item.id]}</div>
                   </details>
                 ))}
               </div>
@@ -115,8 +111,10 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
       aria-pressed={active}
       onClick={onClick}
       className={cx(
-        'flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition',
-        active ? 'btn-primary text-white [&_.text-ink-3]:text-white/70' : 'btn-glass text-ink-2 hover:text-ink',
+        'flex h-9 shrink-0 items-center gap-2 rounded-lg px-3 text-sm transition-colors',
+        active
+          ? 'bg-ink text-bg [&_.text-ink-3]:text-bg/60'
+          : 'bg-surface text-ink-2 shadow-[inset_0_0_0_1px_var(--hairline)] hover:text-ink',
       )}
     >
       {children}

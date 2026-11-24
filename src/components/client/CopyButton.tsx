@@ -22,8 +22,8 @@ export function CopyButton({ value, label, copiedLabel }: { value: string; label
   };
 
   return (
-    <button type="button" onClick={copy} className="btn btn-glass btn-sm" aria-live="polite">
-      {copied ? <Check className="size-4 text-green" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
+    <button type="button" onClick={copy} className="btn btn-secondary btn-sm" aria-live="polite">
+      {copied ? <Check className="size-4 text-positive" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
       {copied ? copiedLabel : label}
     </button>
   );

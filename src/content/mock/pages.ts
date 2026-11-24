@@ -6,7 +6,12 @@ import type {
   licensesPageSchema,
 } from '@/lib/content/schemas';
 
-/** MOCK — `GET /site/pages/contact`. Channels mirror ⚙ `support.*` (email, phone, hours). */
+/**
+ * MOCK — `GET /site/pages/contact`. The channels carry tokens, not numbers:
+ * `{{email}}`, `{{phone}}`, `{{whatsapp…}}` and `{{hours}}` are filled from
+ * the live details the CRM edits (`GET /site/company`), and a channel whose
+ * link needs a detail that is not set — no phone, no WhatsApp — is left out.
+ */
 export const contactPage = {
   seo: {
     title: 'Contact us',
@@ -14,7 +19,7 @@ export const contactPage = {
   },
   hero: {
     eyebrow: 'Contact',
-    title: 'Talk to a person.',
+    title: 'Talk to a person',
     subtitle: 'Questions about coins, an order or your account — we read every message and we usually reply within a day.',
   },
   channels: [
@@ -22,17 +27,25 @@ export const contactPage = {
       icon: 'mail',
       tone: 'blue',
       title: 'Email',
-      value: 'support@vokve.app',
-      href: 'mailto:support@vokve.app',
-      note: 'We usually reply within 24 hours.',
+      value: '{{email}}',
+      href: 'mailto:{{email}}',
+      note: '{{responseTime}}',
     },
     {
       icon: 'phone',
       tone: 'green',
       title: 'Phone',
-      value: '+91 80000 00000',
-      href: 'tel:+918000000000',
-      note: 'Mon–Sat, 9 am – 7 pm IST',
+      value: '{{phoneDisplay}}',
+      href: 'tel:{{phone}}',
+      note: '{{hours}}',
+    },
+    {
+      icon: 'message-circle',
+      tone: 'cyan',
+      title: 'WhatsApp',
+      value: '{{whatsappDisplay}}',
+      href: '{{whatsappLink}}',
+      note: '{{hours}}',
     },
     {
       icon: 'message-circle',
@@ -61,7 +74,7 @@ export const legalIndex = {
   },
   hero: {
     eyebrow: 'Legal',
-    title: 'The fine print, in plain words.',
+    title: 'The fine print, in plain words',
     subtitle: 'Everything that governs your use of VOKVE. Each document starts with a short version.',
   },
   documents: [
@@ -135,7 +148,7 @@ export const licensesPage = {
   },
   hero: {
     eyebrow: 'Credits',
-    title: 'Built on the shoulders of open source.',
+    title: 'Built on the shoulders of open source',
     subtitle: 'VOKVE uses these open-source projects. We are grateful to everyone who maintains them.',
   },
   intro: 'Each project is used under its own licence, linked below.',
@@ -177,7 +190,7 @@ export const licensesPage = {
 
 /**
  * MOCK — `GET /site/pages/invite`, behind the share links the backend writes
- * (`SHARE_URL_BASE` = https://vokve.app/r → /r/{code}). The reward is
+ * (⚙ `support.inviteUrlBase` = https://vokve.com/r → /r/{code}). The reward is
  * ⚙ `coins.referral.invitee`; the pattern is the backend's code alphabet
  * (RULES F1: no O, 0, I or 1) and length (7).
  */
@@ -188,7 +201,7 @@ export const invitePage = {
   },
   hero: {
     eyebrow: 'You’re invited',
-    title: 'A friend wants you walking with them.',
+    title: 'A friend wants you walking with them',
     subtitle: 'Join VOKVE with their invite code and you both get coins once you get going.',
   },
   reward: { value: '20 coins', label: 'for you, and 20 for your friend' },

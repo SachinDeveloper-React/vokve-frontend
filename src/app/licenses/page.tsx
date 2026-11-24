@@ -22,8 +22,8 @@ export default async function LicensesPage() {
           </span>
         ))}
       </PageHero>
-      <section className="container-x max-w-4xl pb-16">
-        <div className="glass overflow-hidden">
+      <section className="container-x pb-16">
+        <div className="card max-w-4xl overflow-hidden">
           <p className="border-b border-hairline px-6 py-4 text-sm text-ink-2 sm:px-8">{page.intro}</p>
           <ul>
             {page.packages.map(pkg => (
@@ -32,15 +32,15 @@ export default async function LicensesPage() {
                   href={pkg.url ?? undefined}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[var(--well)] sm:px-8"
+                  className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-raised sm:px-8"
                 >
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-semibold text-ink">{pkg.name}</span>
+                    <span className="block truncate font-medium text-ink">{pkg.name}</span>
                     <span className="font-mono text-xs text-ink-3">v{pkg.version}</span>
                   </span>
                   <span className="chip">{pkg.license}</span>
                   {pkg.url ? (
-                    <ArrowUpRight className="size-4 text-ink-3 transition group-hover:text-brand" aria-hidden="true" />
+                    <ArrowUpRight className="size-4 text-ink-3 transition-colors group-hover:text-ink" aria-hidden="true" />
                   ) : null}
                 </a>
               </li>

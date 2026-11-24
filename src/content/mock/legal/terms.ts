@@ -47,7 +47,7 @@ export const termsAndConditions = {
           'Keep one account per person. Give us accurate details, and keep your email and phone number current — both are verified with a code.',
           'Keep your sign-in details to yourself. You are responsible for what happens under your account.',
           'An account can be signed in on a limited number of devices at once; you can see and sign out each one from Account → Security.',
-          'Tell us at once at [support@vokve.app](mailto:support@vokve.app) if you think someone else has access.',
+          'Tell us at once at [{{email}}](mailto:{{email}}) if you think someone else has access.',
         ),
       ],
     },
@@ -80,7 +80,7 @@ export const termsAndConditions = {
       title: 'The VOKVE shop',
       blocks: [
         ul(
-          'Prices are shown in Indian rupees and include applicable taxes unless stated otherwise. Checkout shows the exact split between coins and money before you pay.',
+          'Prices are shown in Indian rupees and include applicable taxes unless stated otherwise. Orders are paid in coins, delivery included, and checkout shows the total before you confirm.',
           'An order is accepted when we confirm it. If an item becomes unavailable or was listed at an obviously wrong price, we may cancel the order and return everything you paid, coins included.',
           'An unpaid order is released after its payment window and nothing is charged.',
           'Cancellations, returns and refunds follow our [Refund policy](/refund-policy); delivery follows our [Shipping policy](/shipping-policy).',
@@ -179,7 +179,7 @@ export const termsAndConditions = {
     {
       id: 'contact',
       title: 'Contact us',
-      blocks: [p('Write to [support@vokve.app](mailto:support@vokve.app) or see our [contact page](/contact).')],
+      blocks: [p('Write to [{{email}}](mailto:{{email}}) or see our [contact page](/contact).')],
     },
   ],
 } satisfies z.input<typeof legalDocumentSchema>;

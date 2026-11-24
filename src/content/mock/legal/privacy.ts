@@ -31,7 +31,7 @@ export const privacyPolicy = {
           'VOKVE is operated by **VOKVE Fitness** (“VOKVE”, “we”, “us”). This policy explains how we handle personal data when you use the VOKVE app for Android and iPhone, this website, and our support channels (together, the “Service”).',
         ),
         p(
-          'For the purposes of India’s Digital Personal Data Protection Act, 2023 and similar laws, VOKVE is the data fiduciary (controller) for the data described here. You can reach us at [support@vokve.app](mailto:support@vokve.app).',
+          'For the purposes of India’s Digital Personal Data Protection Act, 2023 and similar laws, VOKVE is the data fiduciary (controller) for the data described here. You can reach us at [{{email}}](mailto:{{email}}).',
         ),
       ],
     },
@@ -185,7 +185,7 @@ export const privacyPolicy = {
           '**Correction** — edit your profile any time; email and phone changes are verified with a code.',
           '**Erasure** — delete your account from the app, or follow the steps on our [account deletion page](/delete-account).',
           '**Withdraw consent** — use the privacy switches or your phone’s permission settings.',
-          '**Grievance** — write to our Grievance Officer at [support@vokve.app](mailto:support@vokve.app); we acknowledge within 24 hours and aim to resolve within 30 days.',
+          '**Grievance** — write to our Grievance Officer at [{{grievanceEmail}}](mailto:{{grievanceEmail}}); we acknowledge within 24 hours and aim to resolve within 30 days.',
           '**Nominate** — you may nominate someone to exercise these rights on your behalf if you are unable to.',
         ),
       ],
@@ -235,7 +235,7 @@ export const privacyPolicy = {
       title: 'Contact us',
       blocks: [
         p(
-          'Questions, requests or complaints: [support@vokve.app](mailto:support@vokve.app), or open a ticket from **Help & Support** in the app. You can also see all our [contact options](/contact).',
+          'Questions, requests or complaints: [{{email}}](mailto:{{email}}), or open a ticket from **Help & Support** in the app. You can also see all our [contact options](/contact).',
         ),
       ],
     },

@@ -3,6 +3,7 @@ import {
   BadgeCheck,
   Bell,
   Building2,
+  Circle,
   CalendarDays,
   CircleHelp,
   Clock,
@@ -62,8 +63,9 @@ import {
 
 /**
  * The glyphs the backend may name, in kebab-case like Lucide's own names.
- * A name not in this list draws `Sparkles` rather than nothing, so content
- * written ahead of a deploy degrades to a generic mark, never a hole.
+ * A name not in this list draws a plain circle rather than nothing, so
+ * content written ahead of a deploy degrades to a neutral mark, never a hole.
+ * Every icon is drawn at a 1.5 stroke in its text colour.
  */
 const ICONS: Record<string, LucideIcon> = {
   activity: Activity,
@@ -127,6 +129,6 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 export function Icon({ name, className }: { name: string; className?: string }) {
-  const Glyph = ICONS[name] ?? Sparkles;
-  return <Glyph className={className} aria-hidden="true" strokeWidth={2} />;
+  const Glyph = ICONS[name] ?? Circle;
+  return <Glyph className={className} aria-hidden="true" strokeWidth={1.5} />;
 }

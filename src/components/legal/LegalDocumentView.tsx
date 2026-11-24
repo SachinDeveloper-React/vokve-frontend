@@ -31,11 +31,11 @@ function Block({ block }: { block: LegalBlock }) {
           {block.items.map((item, i) => (
             <li key={i} className="flex gap-3">
               {ordered ? (
-                <span className="well mt-0.5 grid grid-cols-1 size-6 shrink-0 place-items-center rounded-full text-xs font-bold text-ink">
+                <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-raised font-mono text-xs text-ink-2">
                   {i + 1}
                 </span>
               ) : (
-                <span className="mt-[0.7rem] size-1.5 shrink-0 rounded-full bg-[linear-gradient(135deg,var(--brand-2),var(--brand))]" />
+                <span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-ink-3" />
               )}
               <span>
                 <RichText text={item} />
@@ -47,14 +47,13 @@ function Block({ block }: { block: LegalBlock }) {
     }
     case 'callout': {
       const Glyph = block.tone === 'warning' ? TriangleAlert : block.tone === 'success' ? CircleCheck : Info;
-      const tone = block.tone === 'warning' ? 'gold' : block.tone === 'success' ? 'green' : 'blue';
       return (
-        <div className="well flex gap-4 p-5" data-tone={tone}>
-          <span className="icon-orb [--size:2.25rem]">
+        <div className="well flex gap-4 p-5">
+          <span className="icon-box [--size:2.25rem]">
             <Glyph className="size-4" aria-hidden="true" />
           </span>
           <div>
-            {block.title ? <p className="font-semibold text-ink">{block.title}</p> : null}
+            {block.title ? <p className="font-medium text-ink">{block.title}</p> : null}
             <p className={cx(block.title && 'mt-1')}>
               <RichText text={block.text} />
             </p>
@@ -69,7 +68,7 @@ function Block({ block }: { block: LegalBlock }) {
             <thead>
               <tr>
                 {block.columns.map(column => (
-                  <th key={column} scope="col" className="border-b border-hairline px-4 py-3 text-sm font-semibold text-ink">
+                  <th key={column} scope="col" className="border-b border-hairline px-4 py-3 text-sm font-medium text-ink">
                     {column}
                   </th>
                 ))}
@@ -94,7 +93,7 @@ function Block({ block }: { block: LegalBlock }) {
         <dl className="grid grid-cols-1 gap-3">
           {block.items.map(item => (
             <div key={item.term} className="well grid grid-cols-1 gap-1 p-4 sm:grid-cols-[13rem_1fr] sm:gap-4">
-              <dt className="font-semibold text-ink">{item.term}</dt>
+              <dt className="font-medium text-ink">{item.term}</dt>
               <dd>
                 <RichText text={item.description} />
               </dd>
@@ -128,21 +127,21 @@ export async function LegalDocumentView({ slug }: { slug: string }) {
 
       <div className="container-x grid grid-cols-1 gap-6 pb-16 lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-8">
         <aside className="no-print hidden lg:block">
-          <div className="glass sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto p-3">
+          <div className="card sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto p-3">
             <LegalToc sections={toc} label={labels.onThisPage} />
           </div>
         </aside>
 
         <div className="min-w-0 space-y-6">
-          <details className="disclosure glass no-print lg:hidden">
-            <summary className="flex items-center justify-between px-5 py-4 font-semibold text-ink">
+          <details className="disclosure card no-print lg:hidden">
+            <summary className="flex items-center justify-between px-5 py-4 font-medium text-ink">
               {labels.onThisPage}
               <span className="chip">{doc.sections.length}</span>
             </summary>
             <ol className="space-y-1 px-3 pb-4">
               {toc.map((section, i) => (
                 <li key={section.id}>
-                  <a href={`#${section.id}`} className="flex gap-2.5 rounded-xl px-2 py-1.5 text-sm text-ink-2 hover:text-ink">
+                  <a href={`#${section.id}`} className="flex gap-2.5 rounded-lg px-2 py-1.5 text-sm text-ink-2 transition-colors hover:text-ink">
                     <span className="font-mono text-xs leading-5 text-ink-3">{pad2(i + 1)}</span>
                     {section.title}
                   </a>
@@ -152,13 +151,12 @@ export async function LegalDocumentView({ slug }: { slug: string }) {
           </details>
 
           {doc.highlights.length > 0 ? (
-            <section className="glass relative overflow-hidden p-6 sm:p-8" data-tone="green">
-              <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 -z-10 size-64 rounded-full bg-[var(--tone)] opacity-15 blur-3xl" />
-              <h2 className="font-display text-xl font-semibold text-ink">{labels.shortVersion}</h2>
+            <section className="card p-6 sm:p-8">
+              <h2 className="text-xl font-medium text-ink">{labels.shortVersion}</h2>
               <ul className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {doc.highlights.map(item => (
                   <li key={item} className="well flex gap-3 p-4 text-[0.9375rem] leading-relaxed text-ink-2">
-                    <CircleCheck className="mt-0.5 size-5 shrink-0 text-green" aria-hidden="true" />
+                    <CircleCheck className="mt-0.5 size-4.5 shrink-0 text-ink-3" aria-hidden="true" />
                     {item}
                   </li>
                 ))}
@@ -166,15 +164,15 @@ export async function LegalDocumentView({ slug }: { slug: string }) {
             </section>
           ) : null}
 
-          <article className="glass prose-legal p-6 sm:p-10">
+          <article className="card prose-legal p-6 sm:p-10">
             {doc.sections.map((section, i) => (
               <section
                 key={section.id}
                 id={section.id}
                 className={cx('scroll-mt-28', i > 0 && 'mt-10 border-t border-hairline pt-10')}
               >
-                <h2 className="flex items-baseline gap-3 font-display text-2xl font-semibold text-ink">
-                  <span className="font-mono text-sm font-medium text-ink-3">{pad2(i + 1)}</span>
+                <h2 className="flex items-baseline gap-3 text-2xl text-ink">
+                  <span className="font-mono text-sm text-ink-3">{pad2(i + 1)}</span>
                   {section.title}
                 </h2>
                 <div className="mt-5 space-y-4">

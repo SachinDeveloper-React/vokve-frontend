@@ -19,27 +19,46 @@ function AppleGlyph({ className }: { className?: string }) {
 
 type Store = SiteConfig['stores']['android'];
 
+/**
+ * Store badges drawn the way the stores draw theirs — black, white glyph, two
+ * lines — so they read as badges at a glance. A listing that is not live yet
+ * is an outline with its note instead of a link.
+ */
 function StoreButton({ store, glyph }: { store: Store; glyph: 'play' | 'apple' }) {
   const Glyph = glyph === 'play' ? PlayGlyph : AppleGlyph;
+  const live = Boolean(store.url);
   const body = (
     <>
       <Glyph className="size-6 shrink-0" />
       <span className="flex flex-col items-start leading-none">
-        <span className="text-[0.6875rem] font-medium text-ink-2">{store.url ? store.caption : store.note}</span>
-        <span className="mt-1 text-base font-semibold tracking-tight">{store.label}</span>
+        <span className={cx('text-[0.6875rem]', live ? 'text-white/75' : 'text-ink-3')}>
+          {live ? store.caption : store.note}
+        </span>
+        <span className="mt-1 text-[1.0625rem] font-medium">{store.label}</span>
       </span>
     </>
   );
-  const className = 'btn btn-glass h-14 gap-3 rounded-2xl px-5';
+  const base = 'inline-flex h-12 items-center gap-3 rounded-[0.625rem] pr-5 pl-4';
   if (!store.url) {
     return (
-      <span className={cx(className, 'cursor-default opacity-70')} aria-disabled="true">
+      <span
+        className={cx(base, 'cursor-default text-ink-2 shadow-[inset_0_0_0_1px_var(--hairline)]')}
+        aria-disabled="true"
+      >
         {body}
       </span>
     );
   }
   return (
-    <a href={store.url} target="_blank" rel="noopener noreferrer" className={className}>
+    <a
+      href={store.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cx(
+        base,
+        'bg-[#0b0a09] text-white shadow-[inset_0_0_0_1px_rgb(255_255_255/0.16)] transition-colors duration-150 hover:bg-black',
+      )}
+    >
       {body}
     </a>
   );

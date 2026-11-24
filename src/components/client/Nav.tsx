@@ -14,7 +14,7 @@ const isActive = (href: string, pathname: string | null) =>
 /** The desktop links. Rendered without a pathname as the Suspense fallback. */
 export function NavLinksView({ links, pathname }: { links: ContentLink[]; pathname: string | null }) {
   return (
-    <nav aria-label="Primary" className="hidden items-center gap-0.5 md:flex">
+    <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
       {links.map(link => {
         const active = isActive(link.href, pathname);
         return (
@@ -23,10 +23,8 @@ export function NavLinksView({ links, pathname }: { links: ContentLink[]; pathna
             href={link.href}
             aria-current={active ? 'page' : undefined}
             className={cx(
-              'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
-              active
-                ? 'bg-[var(--well)] text-ink shadow-[inset_0_0_0_1px_var(--well-stroke)]'
-                : 'text-ink-2 hover:bg-[var(--well)] hover:text-ink',
+              'rounded-lg px-3 py-2 text-sm transition-colors',
+              active ? 'bg-raised text-ink' : 'text-ink-2 hover:text-ink',
             )}
           >
             {link.label}
@@ -42,9 +40,8 @@ export function ActiveNavLinks({ links }: { links: ContentLink[] }) {
 }
 
 /**
- * Below `md`: a button that drops a glass sheet under the ornament. The sheet
- * is portalled to <body> because the ornament's own backdrop-filter would
- * otherwise be the only thing the sheet could blur — leaving it see-through.
+ * Below `md`: a button that opens a sheet under the header. The sheet is
+ * portalled to <body> so it stacks above the page, not inside the bar.
  */
 export function MobileMenu({
   links,
@@ -86,16 +83,16 @@ export function MobileMenu({
         aria-controls={panelId}
         aria-label={open ? labels.close : labels.menu}
         onClick={() => setOpen(value => !value)}
-        className="grid size-10 place-items-center rounded-full text-ink transition hover:bg-[var(--well)] md:hidden"
+        className="grid size-9 place-items-center rounded-lg text-ink transition-colors hover:bg-raised md:hidden"
       >
-        {open ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
+        {open ? <X className="size-4.5" aria-hidden="true" /> : <Menu className="size-4.5" aria-hidden="true" />}
       </button>
       {open
         ? createPortal(
             <div
               ref={panelRef}
               id={panelId}
-              className="glass fixed inset-x-3 top-[4.75rem] z-50 p-3 md:hidden"
+              className="fixed inset-x-0 top-16 z-50 border-b border-hairline bg-bg px-4 pt-2 pb-6 shadow-float md:hidden"
             >
               <nav aria-label="Mobile" className="flex flex-col">
                 {links.map(link => (
@@ -103,13 +100,13 @@ export function MobileMenu({
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="rounded-2xl px-4 py-3.5 text-lg font-semibold text-ink transition hover:bg-[var(--well)]"
+                    className="flex h-12 items-center rounded-lg px-3 text-base font-medium text-ink transition-colors hover:bg-raised"
                   >
                     {link.label}
                   </Link>
                 ))}
               </nav>
-              <Link href={cta.href} onClick={() => setOpen(false)} className="btn btn-primary mt-3 w-full">
+              <Link href={cta.href} onClick={() => setOpen(false)} className="btn btn-primary btn-lg mt-4 w-full">
                 {cta.label}
               </Link>
             </div>,

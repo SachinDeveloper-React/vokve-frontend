@@ -39,8 +39,8 @@ export const faqItems: FaqInput[] = [
     category: 'payments',
     question: 'How much can I pay with coins?',
     answer:
-      'Coins cover up to 30% of the items in an order, at ₹0.25 a coin; the rest, and delivery, is paid by card or UPI. The checkout shows the exact split before you pay and you can use fewer coins if you want to save them.',
-    tags: ['discount', 'split', 'upi', 'card', 'price'],
+      'All of it. Everything in the VOKVE shop is paid in coins, at ₹0.25 a coin, and delivery is paid in coins too — no card, UPI or bank payment is taken. The checkout shows the total in coins before you confirm.',
+    tags: ['discount', 'split', 'upi', 'card', 'price', 'coins only'],
   },
   {
     id: 'faq-orders-track',
@@ -140,7 +140,7 @@ export const faqPage = {
   },
   hero: {
     eyebrow: 'Help centre',
-    title: 'Questions, answered.',
+    title: 'Questions, answered',
     subtitle:
       'The same answers our support team gives inside the app. Search, or browse by topic.',
   },

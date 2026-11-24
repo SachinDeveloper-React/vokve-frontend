@@ -26,7 +26,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero hero={page.hero} announcement={site.announcement} />
-      <StatsStrip stats={page.stats} />
+      <StatsStrip stats={page.stats} trust={page.hero.trust} />
       <HowItWorks section={page.howItWorks} />
       <Features section={page.features} />
       <Challenges section={page.challenges} />

@@ -24,7 +24,8 @@ export default async function FaqPage() {
   return (
     <>
       <PageHero eyebrow={page.hero.eyebrow} title={page.hero.title} subtitle={page.hero.subtitle} />
-      <section className="container-x max-w-4xl pb-12">
+      <section className="container-x pb-12">
+        <div className="max-w-4xl">
         <FaqExplorer
           categories={categories}
           items={page.items}
@@ -35,11 +36,12 @@ export default async function FaqPage() {
             noResults: site.labels.noResults,
           }}
         />
+        </div>
       </section>
-      <section className="container-x max-w-4xl pb-16">
-        <div className="glass flex flex-col items-start gap-5 p-7 sm:flex-row sm:items-center sm:p-9">
+      <section className="container-x pb-16">
+        <div className="card flex max-w-4xl flex-col items-start gap-5 p-7 sm:flex-row sm:items-center sm:p-9">
           <div className="flex-1">
-            <h2 className="font-display text-2xl font-semibold text-ink">{page.contact.title}</h2>
+            <h2 className="text-2xl text-ink">{page.contact.title}</h2>
             <p className="mt-1 text-ink-2">{page.contact.body}</p>
           </div>
           <SmartLink href={page.contact.link.href} className="btn btn-primary">

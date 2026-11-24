@@ -35,7 +35,11 @@ const isoDate = z.string().refine(v => !Number.isNaN(Date.parse(v)), 'must be an
 /** Lucide icon name in kebab-case; unknown names render a fallback glyph. */
 const iconName = z.string().min(1);
 
-/** The colour family a tile glows in. Unknown tones fall back to the brand. */
+/**
+ * A colour family some content still names. The current design draws every
+ * icon in the text colour, so tones are accepted but not shown; unknown
+ * tones fall back to the brand.
+ */
 export const toneSchema = z
   .enum(['brand', 'orange', 'blue', 'violet', 'gold', 'green', 'cyan', 'pink'])
   .catch('brand');
@@ -50,7 +54,8 @@ export const seoSchema = z.object({
 });
 
 const sectionHead = z.object({
-  eyebrow: z.string(),
+  /** The short section name above the title ("How it works"); null for none. */
+  eyebrow: z.string().nullable(),
   title: z.string().min(1),
   subtitle: z.string().nullable(),
 });
@@ -144,22 +149,85 @@ export const siteConfigSchema = z.object({
 });
 export type SiteConfig = z.infer<typeof siteConfigSchema>;
 
+// ─── GET /site/company — the live contact details (served today) ───────────
+
+const liveStoreSchema = z.object({ url: z.url(), listed: z.boolean() });
+
+/**
+ * The company's contact details and links, edited on the CRM's Contact &
+ * links page and served by the backend now (`GET /v1/site/company`, RULES
+ * P21) — the same ⚙ `support.*` the app's Help and About screens read. It
+ * overlays `company`, `stores` and `social` in the site config, and fills the
+ * `{{email}}`-style tokens in every page's text (`lib/content/details.ts`),
+ * so an address changed on the panel changes on every page.
+ */
+export const siteCompanySchema = z.object({
+  company: z.object({
+    legalName: z.string().min(1),
+    email: z.email(),
+    phone: z.string().nullable(),
+    whatsapp: z.string().nullable(),
+    hours: z.string().nullable(),
+    responseTime: z.string().min(1),
+    address: z.array(z.string()),
+    grievanceOfficer: z.object({ name: z.string().nullable(), email: z.email() }),
+  }),
+  links: z.object({
+    website: z.url(),
+    privacy: z.url(),
+    terms: z.url(),
+    licenses: z.url(),
+  }),
+  inviteUrlBase: z.url(),
+  stores: z.object({ android: liveStoreSchema, ios: liveStoreSchema }),
+  social: z.array(
+    z.object({ kind: z.enum(['instagram', 'facebook', 'x', 'youtube', 'linkedin']), url: z.url() }),
+  ),
+});
+export type SiteCompany = z.infer<typeof siteCompanySchema>;
+
 // ─── GET /site/pages/home ───────────────────────────────────────────────────
 
 const statSchema = z.object({ value: z.string().min(1), label: z.string().min(1) });
 
+/**
+ * A day as the wallet writes it — "Today · 8,432 steps · +7.98 coins" — with
+ * the state its coins are in, drawn as a dot: grey, amber or green.
+ */
+const dayStatusSchema = z.object({
+  text: z.string().min(1),
+  state: z.enum(['neutral', 'pending', 'paid']).catch('neutral'),
+});
+
+/** One illustrative day of steps, hour by hour, for the fair-play chart. */
+const daySampleSchema = z.object({
+  /** The chart's title, e.g. "One day of walking, hour by hour". */
+  title: z.string().min(1),
+  /** The day in the line under the chart, e.g. "Tue 17 Nov". */
+  date: z.string().min(1),
+  /** Steps in each hour, 00:00 to 23:00. */
+  hours: z.array(z.number().int().nonnegative()).length(24),
+  /** The hours drawn in red: [from, to). */
+  walk: z
+    .object({ from: z.number().int().min(0).max(23), to: z.number().int().min(1).max(24), label: z.string() })
+    .refine(w => w.to > w.from, 'walk.to must be after walk.from'),
+  stepsLabel: z.string(),
+  status: dayStatusSchema,
+});
+
 export const homePageSchema = z.object({
   seo: seoSchema,
   hero: z.object({
-    eyebrow: z.string(),
-    /** `title` is shown with `highlight` (a substring of it) lit in the brand gradient. */
+    eyebrow: z.string().nullable(),
+    /** `title` is shown with `highlight` (a substring of it) set in the brand red. */
     title: z.string().min(1),
     highlight: z.string().nullable(),
     subtitle: z.string(),
     primaryCta: linkSchema,
     secondaryCta: linkSchema.nullable(),
+    /** Short promises, shown as one quiet line under the numbers strip. */
     trust: z.array(z.string()),
-    /** The numbers in the floating windows beside the headline. */
+    /** The numbers in the "Today" card beside the headline. */
     scene: z.object({
       dayLabel: z.string(),
       verifiedLabel: z.string(),
@@ -180,16 +248,25 @@ export const homePageSchema = z.object({
   }),
   stats: z.array(statSchema),
   howItWorks: sectionHead.extend({
-    steps: z.array(z.object({ icon: iconName, title: z.string(), body: z.string() })),
+    steps: z.array(
+      z.object({
+        icon: iconName,
+        title: z.string(),
+        body: z.string(),
+        /** Where one day's coins are at this step, in the day-line format. */
+        status: dayStatusSchema.nullable().default(null),
+      }),
+    ),
   }),
   features: sectionHead.extend({
+    /** The first item leads, drawn large; the rest follow as a list. */
     items: z.array(
       z.object({
         icon: iconName,
         title: z.string(),
         body: z.string(),
-        tone: toneSchema,
-        span: z.enum(['wide', 'regular']).catch('regular'),
+        tone: toneSchema.optional(),
+        span: z.enum(['wide', 'regular']).catch('regular').optional(),
       }),
     ),
   }),
@@ -197,9 +274,11 @@ export const homePageSchema = z.object({
     items: z.array(
       z.object({
         id: z.string(),
-        emoji: z.string(),
+        /** A line icon; the app's emoji are not drawn on the site. */
+        icon: iconName.default('trophy'),
         title: z.string(),
         description: z.string(),
+        /** Groups the board: items with the same cadence sit together, in first-seen order. */
         cadence: z.string(),
         rewardLabel: z.string(),
         badgeLabel: z.string().nullable(),
@@ -210,12 +289,14 @@ export const homePageSchema = z.object({
   fairPlay: sectionHead.extend({
     layers: z.array(z.object({ icon: iconName, title: z.string(), body: z.string() })),
     note: z.string().nullable(),
+    /** The chart beside the layers; null hides it. */
+    sample: daySampleSchema.nullable().default(null),
   }),
   privacy: sectionHead.extend({
     points: z.array(
       z.object({
         icon: iconName,
-        tone: toneSchema,
+        tone: toneSchema.optional(),
         title: z.string(),
         body: z.string(),
         link: linkSchema.nullable(),
@@ -224,7 +305,7 @@ export const homePageSchema = z.object({
   }),
   faq: sectionHead.extend({ items: z.array(faqItemSchema), cta: linkSchema }),
   download: z.object({
-    eyebrow: z.string(),
+    eyebrow: z.string().nullable(),
     title: z.string(),
     subtitle: z.string(),
     note: z.string().nullable(),

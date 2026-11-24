@@ -10,8 +10,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: guide.seo.title, description: guide.seo.description, alternates: { canonical: '/delete-account' } };
 }
 
-const TIMELINE_TONES = ['brand', 'green', 'violet'] as const;
-
 export default async function DeleteAccountPage() {
   const [guide, site] = await Promise.all([getDeletionGuide(), getSiteConfig()]);
   const mailto = `mailto:${guide.noAccess.email}?subject=${encodeURIComponent(guide.noAccess.subject)}&body=${encodeURIComponent(guide.noAccess.bodyTemplate)}`;
@@ -26,38 +24,27 @@ export default async function DeleteAccountPage() {
 
       {/* Timeline: ask → change your mind → erased */}
       <section className="container-x pb-6" aria-label={guide.timeline.map(t => t.title).join(', ')}>
-        <div className="relative">
-          <div className="beam absolute inset-x-[14%] top-1/2 hidden h-px md:block" aria-hidden="true" />
-          <ol className="relative grid grid-cols-1 gap-4 md:grid-cols-3">
-            {guide.timeline.map((stage, i) => (
-              <li
-                key={stage.label}
-                className="glass lift p-6 text-center"
-                data-tone={TIMELINE_TONES[i % TIMELINE_TONES.length]}
-                data-specular
-                data-tilt
-              >
-                <span className="inline-flex rounded-full bg-[var(--tone)] px-3 py-1 text-xs font-bold text-white shadow-[0_8px_20px_-8px_var(--tone)]">
-                  {stage.label}
-                </span>
-                <h2 className="mt-4 text-xl font-semibold text-ink">{stage.title}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-ink-2">{stage.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ol className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-3">
+          {guide.timeline.map(stage => (
+            <li key={stage.label} className="border-t border-hairline pt-6">
+              <span className="font-mono text-sm text-ink-3">{stage.label}</span>
+              <h2 className="mt-4 text-xl text-ink">{stage.title}</h2>
+              <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-2">{stage.body}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="section pt-12">
         <div className="container-x grid grid-cols-1 gap-6 lg:grid-cols-[1.35fr_1fr]">
           {/* In the app */}
-          <article className="glass p-6 sm:p-9">
-            <div className="flex items-center gap-4" data-tone="brand">
-              <span className="icon-orb">
+          <article className="card p-6 sm:p-9">
+            <div className="flex items-center gap-4">
+              <span className="icon-box">
                 <Trash2 className="size-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 className="font-display text-2xl font-semibold text-ink">{guide.inApp.title}</h2>
+                <h2 className="text-2xl font-medium text-ink">{guide.inApp.title}</h2>
                 {guide.inApp.subtitle ? <p className="text-ink-2">{guide.inApp.subtitle}</p> : null}
               </div>
             </div>
@@ -65,11 +52,11 @@ export default async function DeleteAccountPage() {
             <ol className="mt-8 space-y-3">
               {guide.inApp.steps.map((step, i) => (
                 <li key={step.title} className="well flex gap-4 p-4 sm:p-5">
-                  <span className="grid grid-cols-1 size-9 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,var(--brand-2),var(--brand))] font-mono text-sm font-bold text-white shadow-[0_8px_18px_-8px_var(--brand)]">
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-surface font-mono text-xs text-ink-2 shadow-[inset_0_0_0_1px_var(--hairline)]">
                     {pad2(i + 1)}
                   </span>
                   <div>
-                    <h3 className="font-semibold text-ink">{step.title}</h3>
+                    <h3 className="font-medium text-ink">{step.title}</h3>
                     <p className="mt-0.5 text-[0.9375rem] leading-relaxed text-ink-2">{step.body}</p>
                   </div>
                 </li>
@@ -79,16 +66,16 @@ export default async function DeleteAccountPage() {
 
           <div className="grid grid-cols-1 content-start gap-6">
             {/* Confirmation */}
-            <article className="glass p-6 sm:p-8">
-              <h2 className="font-display text-xl font-semibold text-ink">{guide.confirmation.title}</h2>
+            <article className="card p-6 sm:p-8">
+              <h2 className="text-xl font-medium text-ink">{guide.confirmation.title}</h2>
               <ul className="mt-5 space-y-4">
                 {guide.confirmation.items.map(item => (
-                  <li key={item.title} className="flex gap-4" data-tone="violet">
-                    <span className="icon-orb [--size:2.5rem]">
+                  <li key={item.title} className="flex gap-4">
+                    <span className="icon-box [--size:2.5rem]">
                       <Icon name={item.icon} className="size-4" />
                     </span>
                     <div>
-                      <h3 className="font-semibold text-ink">{item.title}</h3>
+                      <h3 className="font-medium text-ink">{item.title}</h3>
                       <p className="mt-0.5 text-sm leading-relaxed text-ink-2">{item.body}</p>
                     </div>
                   </li>
@@ -97,12 +84,12 @@ export default async function DeleteAccountPage() {
             </article>
 
             {/* Export first */}
-            <article id="export" className="glass scroll-mt-28 p-6 sm:p-8" data-tone="blue">
+            <article id="export" className="card scroll-mt-28 p-6 sm:p-8">
               <div className="flex items-center gap-4">
-                <span className="icon-orb [--size:2.5rem]">
+                <span className="icon-box [--size:2.5rem]">
                   <Download className="size-4" aria-hidden="true" />
                 </span>
-                <h2 className="font-display text-xl font-semibold text-ink">{guide.export.title}</h2>
+                <h2 className="text-xl font-medium text-ink">{guide.export.title}</h2>
               </div>
               <p className="mt-4 text-sm leading-relaxed text-ink-2">{guide.export.body}</p>
               <PathChips path={guide.export.path} className="mt-5" />
@@ -114,33 +101,33 @@ export default async function DeleteAccountPage() {
       {/* Erased vs kept */}
       <section className="container-x pb-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <article className="glass p-6 sm:p-8" data-tone="brand">
+          <article className="card p-6 sm:p-8">
             <div className="flex items-center gap-3">
-              <span className="icon-orb [--size:2.5rem]">
+              <span className="icon-box [--size:2.5rem]">
                 <Trash2 className="size-4" aria-hidden="true" />
               </span>
-              <h2 className="font-display text-xl font-semibold text-ink">{guide.erased.title}</h2>
+              <h2 className="text-xl font-medium text-ink">{guide.erased.title}</h2>
             </div>
             <ul className="mt-6 space-y-3">
               {guide.erased.items.map(item => (
                 <li key={item} className="flex gap-3 text-ink-2">
-                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[var(--tone)]" />
+                  <span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-ink-3" />
                   {item}
                 </li>
               ))}
             </ul>
           </article>
-          <article className="glass p-6 sm:p-8" data-tone="gold">
+          <article className="card p-6 sm:p-8">
             <div className="flex items-center gap-3">
-              <span className="icon-orb [--size:2.5rem]">
+              <span className="icon-box [--size:2.5rem]">
                 <Archive className="size-4" aria-hidden="true" />
               </span>
-              <h2 className="font-display text-xl font-semibold text-ink">{guide.retained.title}</h2>
+              <h2 className="text-xl font-medium text-ink">{guide.retained.title}</h2>
             </div>
             <ul className="mt-6 space-y-3">
               {guide.retained.items.map(item => (
                 <li key={item.item} className="well p-4">
-                  <p className="font-semibold text-ink">{item.item}</p>
+                  <p className="font-medium text-ink">{item.item}</p>
                   <p className="mt-1 text-sm leading-relaxed text-ink-2">{item.reason}</p>
                 </li>
               ))}
@@ -152,19 +139,18 @@ export default async function DeleteAccountPage() {
       {/* No app */}
       <section className="section pt-12">
         <div className="container-x">
-          <div className="glass relative overflow-hidden p-8 sm:p-12">
-            <div aria-hidden="true" className="pointer-events-none absolute -right-20 -bottom-32 -z-10 size-[24rem] rounded-full bg-[var(--brand-2)] opacity-20 blur-[100px]" />
+          <div className="card p-8 sm:p-12">
             <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
               <div>
-                <h2 className="text-gradient-ink font-display text-3xl font-bold sm:text-4xl">{guide.noAccess.title}</h2>
+                <h2 className="text-3xl text-ink sm:text-4xl">{guide.noAccess.title}</h2>
                 <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-2">{guide.noAccess.body}</p>
               </div>
               <div className="flex flex-col items-start gap-3 lg:items-end">
-                <a href={mailto} className="btn btn-primary h-13 px-7 text-base">
+                <a href={mailto} className="btn btn-primary btn-lg">
                   <Mail className="size-4" aria-hidden="true" />
                   {guide.noAccess.buttonLabel}
                 </a>
-                <a href={`mailto:${guide.noAccess.email}`} className="text-sm font-semibold text-ink-2 hover:text-ink">
+                <a href={`mailto:${guide.noAccess.email}`} className="text-sm font-medium text-ink-2 hover:text-ink">
                   {guide.noAccess.email}
                 </a>
                 {guide.noAccess.note ? <p className={cx('max-w-xs text-sm text-ink-3 lg:text-right')}>{guide.noAccess.note}</p> : null}
@@ -177,11 +163,13 @@ export default async function DeleteAccountPage() {
       {/* FAQ */}
       {guide.faqs.length > 0 ? (
         <section className="container-x pb-16">
-          <h2 className="text-gradient-ink mb-6 text-center font-display text-3xl font-bold">{guide.faqTitle}</h2>
-          <div className="mx-auto max-w-3xl space-y-3">
+          <div className="max-w-3xl">
+            <h2 className="mb-6 text-3xl text-ink">{guide.faqTitle}</h2>
+            <div className="card">
             {guide.faqs.map(item => (
               <FaqDisclosure key={item.id} item={item} group="deletion-faq" />
             ))}
+            </div>
           </div>
         </section>
       ) : null}

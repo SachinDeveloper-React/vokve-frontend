@@ -89,10 +89,9 @@ export const rewardsPolicy = {
       title: 'Spending coins',
       blocks: [
         ul(
-          'In the shop, each coin is worth ₹0.25 off the price of the items.',
-          'Coins can cover up to 30% of the items in an order. The rest, and delivery, is paid by card, UPI or net banking.',
-          'Some rewards are coins-only; their page says so.',
-          'Checkout shows the exact split before anything is taken, and you can choose to use fewer coins.',
+          'In the shop, each coin is worth ₹0.25 of the price of the items.',
+          'Orders are paid in coins alone, delivery included. No card, UPI or bank payment is taken.',
+          'Checkout shows the total in coins before anything is taken.',
           'Coins spent on an order you cancel before it ships go straight back to your wallet.',
         ),
       ],
@@ -124,7 +123,7 @@ export const rewardsPolicy = {
     {
       id: 'contact',
       title: 'Questions',
-      blocks: [p('Coin History in the app explains every credit. For anything else, write to [support@vokve.app](mailto:support@vokve.app).')],
+      blocks: [p('Coin History in the app explains every credit. For anything else, write to [{{email}}](mailto:{{email}}).')],
     },
   ],
 } satisfies z.input<typeof legalDocumentSchema>;

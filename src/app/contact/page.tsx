@@ -27,18 +27,18 @@ export default async function ContactPage() {
       </PageHero>
 
       <section className="container-x pb-6">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className={page.channels.length === 4 ? 'grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4' : 'grid grid-cols-1 gap-4 md:grid-cols-3'}>
           {page.channels.map(channel => {
             const inner = (
               <>
                 <div className="flex items-start justify-between">
-                  <span className="icon-orb">
-                    <Icon name={channel.icon} className="size-5" />
+                  <span className="icon-box">
+                    <Icon name={channel.icon} className="size-4.5" />
                   </span>
-                  {channel.href ? <ArrowUpRight className="size-5 text-ink-3" aria-hidden="true" /> : null}
+                  {channel.href ? <ArrowUpRight className="size-4.5 text-ink-3" aria-hidden="true" /> : null}
                 </div>
-                <p className="mt-6 text-sm font-semibold uppercase tracking-[0.12em] text-ink-3">{channel.title}</p>
-                <p className="mt-1 font-display text-xl font-semibold break-words text-ink">{channel.value}</p>
+                <p className="mt-6 text-sm font-medium text-ink-3">{channel.title}</p>
+                <p className="mt-1 text-xl font-medium break-words text-ink">{channel.value}</p>
                 {channel.note ? <p className="mt-2 text-sm leading-relaxed text-ink-2">{channel.note}</p> : null}
               </>
             );
@@ -46,15 +46,12 @@ export default async function ContactPage() {
               <SmartLink
                 key={channel.title}
                 href={channel.href}
-                className="glass lift block p-6 sm:p-7"
-                data-tone={channel.tone}
-                data-specular
-                data-tilt
+                className="card block p-6 transition-colors hover:bg-raised sm:p-7"
               >
                 {inner}
               </SmartLink>
             ) : (
-              <div key={channel.title} className="glass p-6 sm:p-7" data-tone={channel.tone}>
+              <div key={channel.title} className="card p-6 sm:p-7">
                 {inner}
               </div>
             );
@@ -64,21 +61,21 @@ export default async function ContactPage() {
 
       <section className="section pt-10">
         <div className="container-x grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
-          <article className="glass p-6 sm:p-9">
-            <h2 className="font-display text-2xl font-semibold text-ink">{page.inApp.title}</h2>
+          <article className="card p-6 sm:p-9">
+            <h2 className="text-2xl font-medium text-ink">{page.inApp.title}</h2>
             <p className="mt-3 leading-relaxed text-ink-2">{page.inApp.body}</p>
             <PathChips path={page.inApp.path} className="mt-6" />
           </article>
 
-          <article className="glass p-6 sm:p-9">
-            <div className="flex items-center gap-3" data-tone="violet">
-              <span className="icon-orb [--size:2.5rem]">
+          <article className="card p-6 sm:p-9">
+            <div className="flex items-center gap-3">
+              <span className="icon-box [--size:2.5rem]">
                 <Building2 className="size-4" aria-hidden="true" />
               </span>
-              <h2 className="font-display text-2xl font-semibold text-ink">{page.companyTitle}</h2>
+              <h2 className="text-2xl font-medium text-ink">{page.companyTitle}</h2>
             </div>
             <address className="mt-5 space-y-1 not-italic text-ink-2">
-              <p className="font-semibold text-ink">{company.legalName}</p>
+              <p className="font-medium text-ink">{company.legalName}</p>
               {company.address
                 .filter(line => line !== company.legalName)
                 .map(line => (
@@ -92,8 +89,8 @@ export default async function ContactPage() {
             </address>
             {company.grievanceOfficer ? (
               <div className="well mt-6 p-5">
-                <p className="flex items-center gap-2 font-semibold text-ink">
-                  <ShieldCheck className="size-4 text-green" aria-hidden="true" />
+                <p className="flex items-center gap-2 font-medium text-ink">
+                  <ShieldCheck className="size-4 text-ink-3" aria-hidden="true" />
                   {company.grievanceOfficer.title}
                 </p>
                 {company.grievanceOfficer.name ? <p className="mt-1 text-ink-2">{company.grievanceOfficer.name}</p> : null}

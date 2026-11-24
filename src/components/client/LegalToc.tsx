@@ -28,7 +28,7 @@ export function LegalToc({ sections, label }: { sections: { id: string; title: s
 
   return (
     <nav aria-label={label}>
-      <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink-3">{label}</p>
+      <p className="px-3 pb-2 text-sm font-medium text-ink-3">{label}</p>
       <ol className="space-y-0.5">
         {sections.map((section, index) => {
           const active = section.id === current;
@@ -38,13 +38,13 @@ export function LegalToc({ sections, label }: { sections: { id: string; title: s
                 href={`#${section.id}`}
                 aria-current={active ? 'location' : undefined}
                 className={cx(
-                  'flex gap-2.5 rounded-xl px-3 py-2 text-sm leading-snug transition-colors',
+                  'flex gap-2.5 rounded-lg px-3 py-2 text-sm leading-snug transition-colors',
                   active
-                    ? 'bg-[var(--well)] font-semibold text-ink shadow-[inset_0_0_0_1px_var(--well-stroke)]'
+                    ? 'bg-raised text-ink'
                     : 'text-ink-2 hover:text-ink',
                 )}
               >
-                <span className={cx('font-mono text-xs leading-5', active ? 'text-brand' : 'text-ink-3')}>
+                <span className={cx('font-mono text-xs leading-5', active ? 'text-brand-ink' : 'text-ink-3')}>
                   {pad2(index + 1)}
                 </span>
                 {section.title}

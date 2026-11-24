@@ -1,45 +1,45 @@
-import { ArrowRight, ArrowUpRight, Check, Medal } from 'lucide-react';
-import { SpatialStage } from '@/components/client/SpatialStage';
+import { ArrowRight, Check } from 'lucide-react';
 import { FaqDisclosure, SectionHeading } from '@/components/ui/blocks';
+import { DayLine } from '@/components/ui/DayLine';
 import { Icon } from '@/components/ui/Icon';
 import { CoinMark, LogoMark } from '@/components/ui/Logo';
 import { RichText } from '@/components/ui/RichText';
 import { SmartLink } from '@/components/ui/SmartLink';
 import { StoreButtons } from '@/components/ui/StoreButtons';
-import type { HomePage, SiteConfig, Tone } from '@/lib/content/schemas';
+import type { HomePage, SiteConfig } from '@/lib/content/schemas';
 import { cx, pad2 } from '@/lib/format';
-import { HeroScene } from './HeroScene';
-
-const STEP_TONES: Tone[] = ['brand', 'violet', 'gold', 'pink'];
+import { DayChart } from './DayChart';
+import { TodayCard } from './TodayCard';
 
 function Headline({ title, highlight }: { title: string; highlight: string | null }) {
   const at = highlight ? title.indexOf(highlight) : -1;
-  if (!highlight || at < 0) return <span className="text-gradient-ink">{title}</span>;
+  if (!highlight || at < 0) return title;
   return (
     <>
-      <span className="text-gradient-ink">{title.slice(0, at)}</span>
-      <span className="text-gradient-brand">{highlight}</span>
-      <span className="text-gradient-ink">{title.slice(at + highlight.length)}</span>
+      {title.slice(0, at)}
+      <span className="text-brand-ink">{highlight}</span>
+      {title.slice(at + highlight.length)}
     </>
   );
 }
 
+/** Real news, as one quiet line: no pill, no badge colour. */
 function Announcement({ announcement }: { announcement: NonNullable<SiteConfig['announcement']> }) {
   const body = (
     <>
-      {announcement.badge ? (
-        <span className="rounded-full bg-[linear-gradient(100deg,var(--brand),var(--brand-2))] px-2.5 py-0.5 text-xs font-bold text-white">
-          {announcement.badge}
+      {announcement.badge ? <span className="font-medium text-ink">{announcement.badge}</span> : null}
+      <span>{announcement.text}</span>
+      {announcement.link ? (
+        <span className="inline-flex items-center gap-1 font-medium text-ink">
+          {announcement.link.label}
+          <ArrowRight className="size-4" aria-hidden="true" />
         </span>
       ) : null}
-      <span className="truncate">{announcement.text}</span>
-      {announcement.link ? <ArrowRight className="size-4 shrink-0" aria-hidden="true" /> : null}
     </>
   );
-  const className =
-    'glass-ornament mb-6 inline-flex max-w-full items-center gap-2 py-1.5 pl-1.5 pr-4 text-sm text-ink-2 transition hover:text-ink';
+  const className = 'inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2';
   return announcement.link ? (
-    <SmartLink href={announcement.link.href} className={className} aria-label={`${announcement.text} — ${announcement.link.label}`}>
+    <SmartLink href={announcement.link.href} className={cx(className, 'rounded-md transition-colors hover:text-ink')}>
       {body}
     </SmartLink>
   ) : (
@@ -49,70 +49,74 @@ function Announcement({ announcement }: { announcement: NonNullable<SiteConfig['
 
 export function Hero({ hero, announcement }: { hero: HomePage['hero']; announcement: SiteConfig['announcement'] }) {
   return (
-    <section className="relative overflow-x-clip pt-32 pb-10 sm:pt-40">
-      <div className="container-x grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
-        <div className="text-center lg:text-left">
-          {announcement ? <Announcement announcement={announcement} /> : null}
-          <div>
-            <span className="eyebrow">{hero.eyebrow}</span>
+    <section className="container-x grid grid-cols-1 items-center gap-16 pt-12 pb-20 sm:pt-16 lg:min-h-[calc(100dvh-4rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12 lg:py-16">
+      <div className="max-w-xl">
+        {announcement ? (
+          <div className="enter mb-10 [--i:0]">
+            <Announcement announcement={announcement} />
           </div>
-          <h1 className="mt-6 font-display text-[clamp(2.75rem,6.4vw,5rem)] font-bold leading-[0.98] tracking-[-0.04em]">
-            <Headline title={hero.title} highlight={hero.highlight} />
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-ink-2 lg:mx-0 lg:text-xl">{hero.subtitle}</p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <SmartLink href={hero.primaryCta.href} className="btn btn-primary h-13 px-7 text-base">
-              {hero.primaryCta.label}
-              <ArrowRight className="size-4" aria-hidden="true" />
+        ) : null}
+        {hero.eyebrow ? <p className="section-label enter mb-4 [--i:0]">{hero.eyebrow}</p> : null}
+        <h1 className="enter text-[clamp(2.5rem,1.5rem+3.6vw,4.25rem)] leading-[1.04] tracking-[-0.03em] text-ink [--i:1]">
+          <Headline title={hero.title} highlight={hero.highlight} />
+        </h1>
+        <p className="enter mt-6 max-w-[34rem] text-lg leading-relaxed text-ink-2 sm:text-xl [--i:2]">{hero.subtitle}</p>
+        <div className="enter mt-10 flex flex-wrap gap-3 [--i:3]">
+          <SmartLink href={hero.primaryCta.href} className="btn btn-primary btn-lg">
+            {hero.primaryCta.label}
+          </SmartLink>
+          {hero.secondaryCta ? (
+            <SmartLink href={hero.secondaryCta.href} className="btn btn-secondary btn-lg">
+              {hero.secondaryCta.label}
             </SmartLink>
-            {hero.secondaryCta ? (
-              <SmartLink href={hero.secondaryCta.href} className="btn btn-glass h-13 px-7 text-base">
-                {hero.secondaryCta.label}
-              </SmartLink>
-            ) : null}
-          </div>
-          <ul className="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-ink-2 lg:justify-start">
-            {hero.trust.map(item => (
-              <li key={item} className="flex items-center gap-2">
-                <span className="grid grid-cols-1 size-5 place-items-center rounded-full bg-green/15">
-                  <Check className="size-3 text-green" strokeWidth={3} aria-hidden="true" />
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
+          ) : null}
         </div>
-        <HeroScene scene={hero.scene} />
+      </div>
+      <div className="enter [--i:2]">
+        <TodayCard scene={hero.scene} />
       </div>
     </section>
   );
 }
 
-export function StatsStrip({ stats }: { stats: HomePage['stats'] }) {
-  if (stats.length === 0) return null;
+/** The figures, then the promises, between two hairlines. */
+export function StatsStrip({ stats, trust }: { stats: HomePage['stats']; trust: HomePage['hero']['trust'] }) {
+  if (stats.length === 0 && trust.length === 0) return null;
   return (
-    <section className="container-x pb-6">
-      <dl className="glass grid grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, i) => (
-          <div
-            key={stat.label}
-            className={cx(
-              'px-6 py-7 text-center sm:px-8',
-              i % 2 === 1 && 'border-l border-hairline',
-              i >= 2 && 'border-t border-hairline lg:border-t-0',
-              i === 2 && 'lg:border-l',
-            )}
-          >
-            <dt className="sr-only">{stat.label}</dt>
-            <dd>
-              <span className="text-gradient-brand block font-display text-3xl font-bold tracking-tight sm:text-4xl">
-                {stat.value}
-              </span>
-              <span className="mt-1 block text-sm text-ink-2">{stat.label}</span>
-            </dd>
-          </div>
-        ))}
-      </dl>
+    <section className="border-y border-hairline">
+      <div className="container-x">
+        {stats.length > 0 ? (
+          <dl className="grid grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={cx(
+                  'flex flex-col py-8',
+                  i % 2 === 1 ? 'border-l border-hairline pl-6' : 'pr-6',
+                  i >= 2 && 'border-t border-hairline lg:border-t-0',
+                  i === 2 && 'lg:border-l lg:pl-6',
+                  i > 0 && 'lg:pl-6',
+                )}
+              >
+                <dt className="order-2 mt-2 text-sm leading-snug text-ink-2">{stat.label}</dt>
+                <dd className="order-1 text-[clamp(1.75rem,1.4rem+1.2vw,2.25rem)] leading-none font-medium tracking-[-0.02em] text-ink tabular-nums">
+                  {stat.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+        {trust.length > 0 ? (
+          <ul className="flex flex-wrap gap-x-8 gap-y-2 border-t border-hairline py-5 text-sm text-ink-2">
+            {trust.map(item => (
+              <li key={item} className="flex items-center gap-2">
+                <Check className="size-4 text-ink-3" aria-hidden="true" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
     </section>
   );
 }
@@ -122,113 +126,111 @@ export function HowItWorks({ section }: { section: HomePage['howItWorks'] }) {
     <section id="how-it-works" className="section">
       <div className="container-x">
         <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
-        <div className="relative mt-16">
-          <div className="beam absolute inset-x-[10%] top-[3.25rem] hidden h-px lg:block" aria-hidden="true" />
-          <ol className="relative grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {section.steps.map((step, i) => (
-              <li
-                key={step.title}
-                className="glass lift reveal p-6 sm:p-7"
-                data-specular
-                data-tilt
-                data-tone={STEP_TONES[i % STEP_TONES.length]}
-              >
-                <div className="flex items-start justify-between">
-                  <span className="icon-orb">
-                    <Icon name={step.icon} className="size-5" />
-                  </span>
-                  <span className="font-display text-5xl font-bold leading-none text-ink/10">{pad2(i + 1)}</span>
-                </div>
-                <h3 className="mt-7 text-xl font-semibold text-ink">{step.title}</h3>
-                <p className="mt-2 leading-relaxed text-ink-2">{step.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ol className="mt-16 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          {section.steps.map((step, i) => (
+            <li key={step.title} className="flex flex-col border-t border-hairline pt-6">
+              <div className="flex items-center gap-3 text-ink-3">
+                <span className="font-mono text-sm tabular-nums">{pad2(i + 1)}</span>
+                <Icon name={step.icon} className="size-4.5" />
+              </div>
+              <h3 className="mt-6 text-xl leading-snug text-ink">{step.title}</h3>
+              <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-2">{step.body}</p>
+              {step.status ? <DayLine className="mt-auto pt-6" parts={[]} status={step.status} /> : null}
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
 }
 
 export function Features({ section }: { section: HomePage['features'] }) {
+  const [lead, ...rest] = section.items;
   return (
-    <section id="features" className="section">
+    <section id="features" className="section pt-0">
       <div className="container-x">
         <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-6">
-          {section.items.map(feature => (
-            <article
-              key={feature.title}
-              data-tone={feature.tone}
-              data-specular
-              data-tilt
-              className={cx(
-                'glass lift reveal overflow-hidden p-6 sm:p-7',
-                feature.span === 'wide' ? 'sm:col-span-2 md:col-span-3' : 'md:col-span-2',
-              )}
-            >
-              <div
-                aria-hidden="true"
-                className={cx(
-                  'pointer-events-none absolute -top-16 -right-16 -z-10 rounded-full bg-[var(--tone)] blur-3xl',
-                  feature.span === 'wide' ? 'size-56 opacity-25' : 'size-40 opacity-15',
-                )}
-              />
-              <span className="icon-orb">
-                <Icon name={feature.icon} className="size-5" />
-              </span>
-              <h3 className={cx('mt-6 font-semibold text-ink', feature.span === 'wide' ? 'text-2xl' : 'text-xl')}>
-                {feature.title}
+        {lead ? (
+          <article className="card mt-16 grid grid-cols-1 gap-6 p-6 sm:p-8 lg:grid-cols-2 lg:items-end lg:gap-12 lg:p-10">
+            <div>
+              <Icon name={lead.icon} className="size-6 text-ink-2" />
+              <h3 className="mt-8 text-[clamp(1.5rem,1.2rem+1vw,2rem)] leading-tight tracking-[-0.015em] text-ink">
+                {lead.title}
               </h3>
-              <p className="mt-2 max-w-md leading-relaxed text-ink-2">{feature.body}</p>
-            </article>
-          ))}
-        </div>
+            </div>
+            <p className="text-lg leading-relaxed text-ink-2">{lead.body}</p>
+          </article>
+        ) : null}
+        {rest.length > 0 ? (
+          <ul className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {rest.map(feature => (
+              <li key={feature.title} className="border-t border-hairline pt-6">
+                <div className="flex items-center gap-3">
+                  <Icon name={feature.icon} className="size-4.5 shrink-0 text-ink-3" />
+                  <h3 className="text-[1.0625rem] text-ink">{feature.title}</h3>
+                </div>
+                <p className="mt-2 text-[0.9375rem] leading-relaxed text-ink-2">{feature.body}</p>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </section>
   );
 }
 
+/** The prize board: challenges grouped by cadence, rewards in one right-aligned column. */
 export function Challenges({ section }: { section: HomePage['challenges'] }) {
+  const groups: { cadence: string; items: HomePage['challenges']['items'] }[] = [];
+  for (const item of section.items) {
+    const group = groups.find(g => g.cadence === item.cadence);
+    if (group) group.items.push(item);
+    else groups.push({ cadence: item.cadence, items: [item] });
+  }
+
   return (
-    <section id="challenges" className="section">
+    <section id="challenges" className="section pt-0">
       <div className="container-x">
         <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
-      </div>
-      <div className="container-x">
-        <div className="scroller-mask no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pt-4 pb-12 sm:-mx-6 sm:px-6">
-          {section.items.map(item => (
-            <article
-              key={item.id}
-              className="glass lift w-[16.5rem] shrink-0 snap-start p-5 sm:w-[18rem] sm:p-6"
-              data-specular
-              data-tilt
-            >
-              <div className="flex items-start justify-between">
-                <span className="well grid grid-cols-1 size-14 place-items-center rounded-2xl text-3xl" aria-hidden="true">
-                  {item.emoji}
-                </span>
-                <span className="chip">{item.cadence}</span>
-              </div>
-              <h3 className="mt-5 text-lg font-semibold text-ink">{item.title}</h3>
-              <p className="mt-1 text-sm text-ink-2">{item.description}</p>
-              <div className="mt-6 flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full bg-gold/12 py-1 pr-3 pl-1 text-sm font-bold text-gold">
-                  <CoinMark className="size-6" />
-                  {item.rewardLabel}
-                </span>
-                {item.badgeLabel ? (
-                  <span className="chip">
-                    <Medal className="size-3.5" aria-hidden="true" />
-                    {item.badgeLabel}
-                  </span>
-                ) : null}
-              </div>
-            </article>
+        <div
+          className={cx(
+            'card mt-16 grid grid-cols-1 divide-y divide-hairline lg:divide-x lg:divide-y-0',
+            groups.length === 2 && 'lg:grid-cols-2',
+            groups.length >= 3 && 'lg:grid-cols-3',
+          )}
+        >
+          {groups.map(group => (
+            <section key={group.cadence} aria-label={group.cadence} className="min-w-0">
+              <h3 className="flex items-baseline justify-between px-6 pt-6 pb-3 text-[0.9375rem] font-medium text-ink">
+                {group.cadence}
+                <span className="font-mono text-xs text-ink-3 tabular-nums">{group.items.length}</span>
+              </h3>
+              <ul>
+                {group.items.map(item => (
+                  <li
+                    key={item.id}
+                    className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-4 border-t border-hairline px-6 py-4"
+                  >
+                    <Icon name={item.icon} className="mt-0.5 size-4.5 text-ink-3" />
+                    <div className="min-w-0">
+                      <p className="text-[0.9375rem] font-medium text-ink">{item.title}</p>
+                      <p className="mt-0.5 text-sm text-ink-2">{item.description}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="inline-flex items-center gap-1.5 font-mono text-[0.8125rem] text-ink tabular-nums">
+                        <CoinMark className="size-4" />
+                        {item.rewardLabel}
+                      </p>
+                      {item.badgeLabel ? <p className="mt-0.5 font-mono text-xs text-ink-3">{item.badgeLabel}</p> : null}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
         </div>
         {section.note ? (
-          <p className="prose-legal mx-auto max-w-2xl text-center text-sm">
+          <p className="prose-legal mt-6 max-w-2xl text-sm">
             <RichText text={section.note} />
           </p>
         ) : null}
@@ -239,41 +241,32 @@ export function Challenges({ section }: { section: HomePage['challenges'] }) {
 
 export function FairPlay({ section }: { section: HomePage['fairPlay'] }) {
   return (
-    <section id="fair-play" className="section">
-      <div className="container-x grid grid-cols-1 items-center gap-14 lg:grid-cols-[1fr_1.1fr]">
-        <div className="text-center lg:text-left">
-          <SectionHeading align="left" eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} className="mx-auto lg:mx-0" />
-          {section.note ? (
-            <p className="prose-legal mx-auto mt-6 max-w-xl lg:mx-0">
-              <RichText text={section.note} />
-            </p>
-          ) : null}
-        </div>
-        <SpatialStage className="stage" strength={5}>
-          <ol className="stage-inner space-y-4 [--base-rx:6deg] [--base-ry:-14deg] max-lg:[--base-rx:0deg] max-lg:[--base-ry:0deg]">
+    <section id="fair-play" className="section pt-0">
+      <div className="container-x grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
+        <div>
+          <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
+          <ol className="mt-10 border-b border-hairline">
             {section.layers.map((layer, i) => (
-              <li
-                key={layer.title}
-                className={cx(
-                  'glass flex items-start gap-4 p-5 sm:p-6',
-                  ['lg:translate-z-0', 'lg:ml-8 lg:translate-z-[40px]', 'lg:ml-16 lg:translate-z-[80px]', 'lg:ml-24 lg:translate-z-[120px]'][i % 4],
-                )}
-                data-tone={(['blue', 'violet', 'gold', 'green'] as const)[i % 4]}
-              >
-                <span className="icon-orb [--size:2.75rem]">
-                  <Icon name={layer.icon} className="size-5" />
-                </span>
+              <li key={layer.title} className="grid grid-cols-[2.5rem_minmax(0,1fr)] border-t border-hairline py-5">
+                <span className="pt-0.5 font-mono text-sm text-ink-3 tabular-nums">{pad2(i + 1)}</span>
                 <div>
-                  <h3 className="flex items-baseline gap-2.5 text-lg font-semibold text-ink">
-                    <span className="font-mono text-xs text-ink-3">{pad2(i + 1)}</span>
-                    {layer.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-ink-2">{layer.body}</p>
+                  <h3 className="text-[1.0625rem] text-ink">{layer.title}</h3>
+                  <p className="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">{layer.body}</p>
                 </div>
               </li>
             ))}
           </ol>
-        </SpatialStage>
+          {section.note ? (
+            <p className="prose-legal mt-6 max-w-xl text-sm">
+              <RichText text={section.note} />
+            </p>
+          ) : null}
+        </div>
+        {section.sample ? (
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <DayChart sample={section.sample} />
+          </div>
+        ) : null}
       </div>
     </section>
   );
@@ -281,29 +274,29 @@ export function FairPlay({ section }: { section: HomePage['fairPlay'] }) {
 
 export function PrivacyPromise({ section }: { section: HomePage['privacy'] }) {
   return (
-    <section id="privacy" className="section">
+    <section id="privacy" className="section pt-0">
       <div className="container-x">
         <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-16 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {section.points.map(point => (
-            <article key={point.title} className="glass lift reveal flex flex-col p-6" data-tone={point.tone} data-specular data-tilt>
-              <span className="icon-orb">
-                <Icon name={point.icon} className="size-5" />
-              </span>
-              <h3 className="mt-6 text-lg font-semibold text-ink">{point.title}</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-2">{point.body}</p>
+            <li key={point.title} className="flex flex-col border-t border-hairline pt-6">
+              <Icon name={point.icon} className="size-4.5 text-ink-3" />
+              <h3 className="mt-5 text-[1.0625rem] text-ink">{point.title}</h3>
+              <p className="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-ink-2">{point.body}</p>
               {point.link ? (
                 <SmartLink
                   href={point.link.href}
-                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink transition hover:gap-2.5"
+                  className="group mt-5 inline-flex items-center gap-1.5 self-start rounded-md text-sm font-medium text-ink"
                 >
-                  {point.link.label}
-                  <ArrowUpRight className="size-4 text-brand" aria-hidden="true" />
+                  <span className="underline decoration-hairline underline-offset-4 transition-colors group-hover:decoration-current">
+                    {point.link.label}
+                  </span>
+                  <ArrowRight className="size-4 text-ink-3" aria-hidden="true" />
                 </SmartLink>
               ) : null}
-            </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
@@ -311,16 +304,16 @@ export function PrivacyPromise({ section }: { section: HomePage['privacy'] }) {
 
 export function FaqTeaser({ section }: { section: HomePage['faq'] }) {
   return (
-    <section id="faq" className="section">
-      <div className="container-x grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr]">
-        <div className="text-center lg:text-left">
-          <SectionHeading align="left" eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} className="mx-auto lg:mx-0" />
-          <SmartLink href={section.cta.href} className="btn btn-glass mt-8">
+    <section id="faq" className="section pt-0">
+      <div className="container-x grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
+        <div>
+          <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
+          <SmartLink href={section.cta.href} className="btn btn-secondary mt-8">
             {section.cta.label}
             <ArrowRight className="size-4" aria-hidden="true" />
           </SmartLink>
         </div>
-        <div className="space-y-3">
+        <div className="card self-start">
           {section.items.map(item => (
             <FaqDisclosure key={item.id} item={item} group="home-faq" />
           ))}
@@ -332,30 +325,22 @@ export function FaqTeaser({ section }: { section: HomePage['faq'] }) {
 
 export function Download({ section, site }: { section: HomePage['download']; site: SiteConfig }) {
   return (
-    <section id="download" className="section pb-12">
+    <section id="download" className="section pt-0">
       <div className="container-x">
-        <div className="glass relative overflow-hidden p-8 sm:p-12 lg:p-16">
-          <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-24 -z-10 size-[28rem] rounded-full bg-[var(--brand)] opacity-25 blur-[110px]" />
-          <div aria-hidden="true" className="pointer-events-none absolute -top-32 right-0 -z-10 size-[24rem] rounded-full bg-[var(--brand-2)] opacity-20 blur-[100px]" />
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.3fr_1fr]">
-            <div className="text-center lg:text-left">
-              <span className="eyebrow">{section.eyebrow}</span>
-              <h2 className="text-gradient-ink mt-5 font-display text-[clamp(2.2rem,4.6vw,3.75rem)] font-bold leading-[1.02]">
-                {section.title}
-              </h2>
-              <p className="mx-auto mt-5 max-w-lg text-lg text-ink-2 lg:mx-0">{section.subtitle}</p>
-              <StoreButtons stores={site.stores} className="mt-8 justify-center lg:justify-start" />
-              {section.note ? <p className="mt-6 text-sm text-ink-3">{section.note}</p> : null}
-            </div>
-            <SpatialStage className="stage mx-auto w-full max-w-[18rem]" strength={14}>
-              <div className="stage-inner aspect-square [--base-rx:12deg] [--base-ry:-18deg]">
-                <div className="layer inset-x-[8%] -bottom-[16%] h-[16%] rounded-[50%] bg-[var(--brand)] opacity-40 blur-2xl [--z:-60px]" />
-                <div className="layer floating inset-0 [--z:40px]">
-                  <LogoMark className="size-full rounded-[22.6%] shadow-[0_40px_80px_-24px_rgb(229_0_0/0.65),inset_0_1px_0_rgb(255_255_255/0.4)]" />
-                </div>
-              </div>
-            </SpatialStage>
+        <div className="card grid grid-cols-1 items-center gap-10 p-8 sm:p-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:p-16">
+          <div className="max-w-xl">
+            {section.eyebrow ? <p className="section-label mb-3">{section.eyebrow}</p> : null}
+            <h2 className="text-[clamp(2rem,1.4rem+2.4vw,3.25rem)] leading-[1.06] tracking-[-0.025em] text-ink">
+              {section.title}
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-ink-2">{section.subtitle}</p>
+            <StoreButtons stores={site.stores} className="mt-8" />
+            {section.note ? <p className="mt-6 text-sm text-ink-3">{section.note}</p> : null}
           </div>
+          <figure className="hidden flex-col items-center gap-3 lg:flex lg:pr-8">
+            <LogoMark className="size-32 shadow-float [border-radius:22.6%]" />
+            <figcaption className="text-sm text-ink-2">{site.brand.name}</figcaption>
+          </figure>
         </div>
       </div>
     </section>

@@ -28,10 +28,10 @@ export function ThemeToggle({ label }: { label: string }) {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="grid size-10 shrink-0 place-items-center rounded-full text-ink-2 transition hover:bg-[var(--well)] hover:text-ink"
+      className="grid size-9 shrink-0 place-items-center rounded-lg text-ink-2 transition-colors hover:bg-raised hover:text-ink"
     >
-      <Moon className="size-[1.125rem] dark:hidden" aria-hidden="true" />
-      <Sun className="hidden size-[1.125rem] dark:block" aria-hidden="true" />
+      <Moon className="size-4.5 dark:hidden" aria-hidden="true" />
+      <Sun className="hidden size-4.5 dark:block" aria-hidden="true" />
     </button>
   );
 }

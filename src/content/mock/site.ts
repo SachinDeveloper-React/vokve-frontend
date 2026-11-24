@@ -3,8 +3,10 @@ import type { siteConfigSchema } from '@/lib/content/schemas';
 
 /**
  * MOCK — stands in for `GET /site/config` until the backend serves it.
- * Support details mirror the backend's ⚙ `support.*` defaults; the Play
- * listing uses the app's real applicationId (`com.vokve.fitness`).
+ * `company`, the store links and `social` are replaced by the live details
+ * the CRM edits (`GET /site/company`, see `lib/content/details.ts`); what is
+ * kept from here is the copy around them — the officer's title and each
+ * store button's words, "Coming soon" included.
  */
 export const siteConfig = {
   brand: {
@@ -14,7 +16,7 @@ export const siteConfig = {
       'VOKVE turns the steps you already take into coins you can spend on real rewards — every step verified, every coin earned.',
   },
   seo: {
-    siteUrl: 'https://vokve.app',
+    siteUrl: 'https://vokve.com',
     titleTemplate: '%s · VOKVE',
     defaultTitle: 'VOKVE — Walk. Earn. Redeem.',
     description:
@@ -23,20 +25,20 @@ export const siteConfig = {
   },
   company: {
     legalName: 'VOKVE Fitness',
-    email: 'support@vokve.app',
+    email: 'support@vokve.com',
     phone: '+918000000000',
     whatsapp: null,
     hours: 'Mon–Sat, 9 am – 7 pm IST',
     responseTime: 'We usually reply within 24 hours.',
     address: ['VOKVE Fitness', 'India'],
-    grievanceOfficer: { title: 'Grievance Officer', name: null, email: 'support@vokve.app' },
+    grievanceOfficer: { title: 'Grievance Officer', name: null, email: 'support@vokve.com' },
   },
   stores: {
     android: {
       url: 'https://play.google.com/store/apps/details?id=com.vokve.fitness',
       label: 'Google Play',
       caption: 'Get it on',
-      note: null,
+      note: 'Coming soon',
     },
     ios: {
       url: null,
@@ -46,8 +48,8 @@ export const siteConfig = {
     },
   },
   announcement: {
-    badge: 'New',
-    text: 'Weekly and monthly step challenges, each with its own coin reward.',
+    badge: null,
+    text: 'Weekly and monthly step challenges, each with its own coin reward',
     link: { label: 'See challenges', href: '/#challenges' },
   },
   nav: [
@@ -114,7 +116,7 @@ export const siteConfig = {
     effectiveFrom: 'Effective from',
     version: 'Version',
     shortVersion: 'The short version',
-    searchPlaceholder: 'Search questions — try “coins” or “delete”',
+    searchPlaceholder: 'Search questions',
     allCategories: 'All',
     noResults: 'Nothing matches that yet. Try another word, or write to us.',
     copy: 'Copy code',

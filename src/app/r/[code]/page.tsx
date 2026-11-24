@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { CopyButton } from '@/components/client/CopyButton';
 import { PageHero } from '@/components/ui/blocks';
+import { DayLine } from '@/components/ui/DayLine';
 import { CoinMark } from '@/components/ui/Logo';
 import { StoreButtons } from '@/components/ui/StoreButtons';
 import { getInvitePage, getSiteConfig } from '@/lib/content';
@@ -10,8 +11,8 @@ import type { InvitePage as InviteContent, SiteConfig } from '@/lib/content/sche
 import { pad2 } from '@/lib/format';
 
 /**
- * Where the app's share links land: `SHARE_URL_BASE` (https://vokve.app/r)
- * + `/{code}`. The page itself is cached; only the code is read per request.
+ * Where the app's share links land: ⚙ `support.inviteUrlBase`
+ * (https://vokve.com/r, edited on the CRM's Contact & links page) + `/{code}`. The page itself is cached; only the code is read per request.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getInvitePage();
@@ -41,12 +42,12 @@ async function InviteCode({
 
   if (!valid) {
     return (
-      <div className="glass flex gap-4 p-6 sm:p-8" data-tone="gold">
-        <span className="icon-orb [--size:2.75rem]">
-          <TriangleAlert className="size-5" aria-hidden="true" />
+      <div className="card flex gap-4 p-6 sm:p-8">
+        <span className="icon-box [--size:2.75rem]">
+          <TriangleAlert className="size-4.5" aria-hidden="true" />
         </span>
         <div>
-          <h2 className="font-display text-xl font-semibold text-ink">{page.invalid.title}</h2>
+          <h2 className="text-xl font-medium text-ink">{page.invalid.title}</h2>
           <p className="mt-1 leading-relaxed text-ink-2">{page.invalid.body}</p>
         </div>
       </div>
@@ -54,10 +55,9 @@ async function InviteCode({
   }
 
   return (
-    <div className="glass relative overflow-hidden p-6 text-center sm:p-10">
-      <div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 size-72 -translate-x-1/2 rounded-full bg-[var(--brand)] opacity-20 blur-3xl" />
-      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-ink-3">{page.codeLabel}</p>
-      <p className="mt-4 font-mono text-[clamp(2.25rem,8vw,3.75rem)] font-bold tracking-[0.18em] text-ink">{code}</p>
+    <div className="card p-6 text-center sm:p-10">
+      <p className="section-label">{page.codeLabel}</p>
+      <p className="mt-4 font-mono text-[clamp(2.25rem,8vw,3.75rem)] font-medium tracking-[0.18em] text-ink">{code}</p>
       <div className="mt-6 flex justify-center">
         <CopyButton value={code} label={labels.copy} copiedLabel={labels.copied} />
       </div>
@@ -66,7 +66,7 @@ async function InviteCode({
 }
 
 function CodeSkeleton() {
-  return <div className="glass h-56 animate-pulse" aria-hidden="true" />;
+  return <div className="card h-56 animate-pulse" aria-hidden="true" />;
 }
 
 export default async function InvitePage({ params }: PageProps<'/r/[code]'>) {
@@ -74,35 +74,34 @@ export default async function InvitePage({ params }: PageProps<'/r/[code]'>) {
   return (
     <>
       <PageHero eyebrow={page.hero.eyebrow} title={page.hero.title} subtitle={page.hero.subtitle}>
-        <span className="glass-ornament inline-flex items-center gap-2.5 py-1.5 pr-4 pl-1.5">
-          <CoinMark className="size-8" />
-          <span className="text-left leading-tight">
-            <span className="block font-bold text-ink">{page.reward.value}</span>
-            <span className="block text-xs text-ink-2">{page.reward.label}</span>
-          </span>
+        <span className="inline-flex items-center gap-3">
+          <CoinMark className="size-7" />
+          <DayLine parts={[page.reward.value, page.reward.label]} />
         </span>
       </PageHero>
 
-      <section className="container-x max-w-3xl space-y-6 pb-16">
+      <section className="container-x pb-16">
+        <div className="max-w-3xl space-y-6">
         <Suspense fallback={<CodeSkeleton />}>
           <InviteCode params={params} page={page} labels={site.labels} />
         </Suspense>
 
         <ol className="grid gap-3 sm:grid-cols-2">
           {page.steps.map((step, i) => (
-            <li key={step.title} className="glass flex gap-4 p-5">
-              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,var(--brand-2),var(--brand))] font-mono text-sm font-bold text-white">
+            <li key={step.title} className="card flex gap-4 p-5">
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-raised font-mono text-xs text-ink-2">
                 {pad2(i + 1)}
               </span>
               <div>
-                <h2 className="font-semibold text-ink">{step.title}</h2>
+                <h2 className="font-medium text-ink">{step.title}</h2>
                 <p className="mt-0.5 text-sm leading-relaxed text-ink-2">{step.body}</p>
               </div>
             </li>
           ))}
         </ol>
 
-        <StoreButtons stores={site.stores} className="justify-center" />
+        <StoreButtons stores={site.stores} />
+        </div>
       </section>
     </>
   );

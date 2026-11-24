@@ -102,7 +102,7 @@ export const deletionGuide = {
   noAccess: {
     title: 'No longer have the app?',
     body: 'Email us from the address on your account and we will verify it’s you, then schedule the deletion for you. The same 14-day window applies.',
-    email: 'support@vokve.app',
+    email: '{{email}}',
     subject: 'Account deletion request',
     bodyTemplate:
       'Hello VOKVE team,\n\nPlease delete my VOKVE account.\n\nEmail on the account: \nPhone number on the account: \nReason (optional): \n\nThank you.',

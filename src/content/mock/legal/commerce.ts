@@ -100,7 +100,7 @@ export const refundPolicy = {
     {
       id: 'contact',
       title: 'Need help?',
-      blocks: [p('Open a ticket from **Help & Support** in the app, or write to [support@vokve.app](mailto:support@vokve.app).')],
+      blocks: [p('Open a ticket from **Help & Support** in the app, or write to [{{email}}](mailto:{{email}}).')],
     },
   ],
 } satisfies z.input<typeof legalDocumentSchema>;
@@ -138,7 +138,7 @@ export const shippingPolicy = {
             ['Over ₹999', 'Free'],
           ],
         ),
-        p('Delivery is paid by card, UPI or net banking, except on coins-only rewards, where it is included.'),
+        p('Delivery is paid in coins with the rest of the order, at the same ₹0.25 a coin.'),
       ],
     },
     {
@@ -180,7 +180,7 @@ export const shippingPolicy = {
     {
       id: 'contact',
       title: 'Questions',
-      blocks: [p('Write to [support@vokve.app](mailto:support@vokve.app) or open a ticket from **Help & Support** in the app.')],
+      blocks: [p('Write to [{{email}}](mailto:{{email}}) or open a ticket from **Help & Support** in the app.')],
     },
   ],
 } satisfies z.input<typeof legalDocumentSchema>;

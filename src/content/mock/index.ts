@@ -9,6 +9,7 @@ import { rewardsPolicy } from './legal/rewards';
 import { refundPolicy, shippingPolicy } from './legal/commerce';
 
 export { siteConfig } from './site';
+export { siteCompany } from './company';
 export { homePage } from './home';
 export { aboutPage } from './about';
 export { faqPage } from './faqs';
