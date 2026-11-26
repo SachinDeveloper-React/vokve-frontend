@@ -395,6 +395,24 @@
   }
 }
 
+/*
+ * The home page's sections can be hidden and reordered from the panel, so
+ * none of them owns the gap above it: each sits flush under the one before
+ * (`pt-0`), and whichever comes first — or straight after the numbers strip,
+ * which is not a `.section` — gets the full gap back. Unlayered on purpose,
+ * so it wins over the `pt-0` utility.
+ */
+.home-flow > .section:first-child,
+.home-flow > :not(.section) + .section {
+  padding-top: 5rem;
+}
+@media (min-width: 1024px) {
+  .home-flow > .section:first-child,
+  .home-flow > :not(.section) + .section {
+    padding-top: 7.5rem;
+  }
+}
+
 /* ─── Motion: one entrance, one ring ─────────────────────────────────────── */
 
 @media (prefers-reduced-motion: no-preference) {

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import {
   Challenges,
   Download,
@@ -23,17 +24,24 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const [page, site] = await Promise.all([getHomePage(), getSiteConfig()]);
+
+  // The hero is always first; below it, the sections the panel shows, in its order.
+  const sections: Record<string, () => ReactNode> = {
+    stats: () => <StatsStrip key="stats" stats={page.stats} trust={page.hero.trust} />,
+    howItWorks: () => <HowItWorks key="howItWorks" section={page.howItWorks} />,
+    features: () => <Features key="features" section={page.features} />,
+    challenges: () => <Challenges key="challenges" section={page.challenges} />,
+    fairPlay: () => <FairPlay key="fairPlay" section={page.fairPlay} />,
+    privacy: () => <PrivacyPromise key="privacy" section={page.privacy} />,
+    faq: () => <FaqTeaser key="faq" section={page.faq} />,
+    download: () => <Download key="download" section={page.download} site={site} />,
+  };
+  const shown = [...new Set(page.sections)].filter(id => id in sections);
+
   return (
     <>
       <Hero hero={page.hero} announcement={site.announcement} />
-      <StatsStrip stats={page.stats} trust={page.hero.trust} />
-      <HowItWorks section={page.howItWorks} />
-      <Features section={page.features} />
-      <Challenges section={page.challenges} />
-      <FairPlay section={page.fairPlay} />
-      <PrivacyPromise section={page.privacy} />
-      <FaqTeaser section={page.faq} />
-      <Download section={page.download} site={site} />
+      <div className="home-flow">{shown.map(id => sections[id]!())}</div>
     </>
   );
 }

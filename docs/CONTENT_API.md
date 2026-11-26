@@ -79,7 +79,9 @@ knows. These arrive filled:
   `{{shippingFee}}`, `{{freeShippingAbove}}`, `{{challengeCount}}`; and the
   deletion guide's `graceDays` (⚙ `account.deletionGraceDays`).
 - **FAQs** — `/site/faqs` items are the Help centre's active articles
-  (`support_faqs`); the home page's questions are articles picked by id.
+  (`support_faqs`) that are not kept to the app (each has an "Also on the
+  website" switch); the home page's questions are articles picked by id,
+  under the same rule.
 - **Challenges** — the home board is every running challenge
   (`challenge_definitions`) unless the panel switches the live board off.
 - **The legal hub's list** — the published documents, in their own order,
@@ -107,6 +109,15 @@ tokens are left as written — and the panel refuses to save one.
   `title`, the `date` for the line under the chart, 24 hourly step counts in
   `hours`, the red `walk` hours as `{ from, to, label }` (`to` exclusive), a
   `stepsLabel` and a `status`. `null` hides the chart.
+- **Which sections, in what order.** `sections` lists the home page's
+  sections below the hero, top to bottom (`stats`, `howItWorks`, `features`,
+  `challenges`, `fairPlay`, `privacy`, `faq`, `download`); one left out is not
+  drawn, an unknown name is skipped, and a backend that sends none gets every
+  section in that order. The panel switches them off and moves them; the
+  backend also drops the menu, footer and announcement links to a hidden
+  section, and the hero's second button when it points at one. Whichever
+  section comes first gets the full gap above it (`.home-flow` in
+  `globals.css`).
 - **Challenges** are grouped on the board by `cadence`, in first-seen order,
   and each takes a Lucide `icon` (default `trophy`). The app's emoji are not
   sent or drawn. List every challenge in `challenge_definitions` so the board

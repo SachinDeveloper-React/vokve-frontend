@@ -218,8 +218,17 @@ const daySampleSchema = z.object({
   status: dayStatusSchema,
 });
 
+/** The home page's sections below the hero, in the order they shipped. */
+export const HOME_SECTIONS = ['stats', 'howItWorks', 'features', 'challenges', 'fairPlay', 'privacy', 'faq', 'download'] as const;
+
 export const homePageSchema = z.object({
   seo: seoSchema,
+  /**
+   * Which sections show below the hero, top to bottom — the panel hides and
+   * moves them (RULES P22). A name this build does not know is skipped; a
+   * backend from before the list sends none, and every section shows.
+   */
+  sections: z.array(z.string()).default([...HOME_SECTIONS]),
   hero: z.object({
     eyebrow: z.string().nullable(),
     /** `title` is shown with `highlight` (a substring of it) set in the brand red. */

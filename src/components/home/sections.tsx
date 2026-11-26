@@ -123,7 +123,7 @@ export function StatsStrip({ stats, trust }: { stats: HomePage['stats']; trust: 
 
 export function HowItWorks({ section }: { section: HomePage['howItWorks'] }) {
   return (
-    <section id="how-it-works" className="section">
+    <section id="how-it-works" className="section pt-0">
       <div className="container-x">
         <SectionHeading eyebrow={section.eyebrow} title={section.title} subtitle={section.subtitle} />
         <ol className="mt-16 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
