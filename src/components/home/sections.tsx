@@ -338,7 +338,7 @@ export function Download({ section, site }: { section: HomePage['download']; sit
             {section.note ? <p className="mt-6 text-sm text-ink-3">{section.note}</p> : null}
           </div>
           <figure className="hidden flex-col items-center gap-3 lg:flex lg:pr-8">
-            <LogoMark className="size-32 shadow-float [border-radius:22.6%]" />
+            <LogoMark large className="size-32 shadow-float [border-radius:22.6%]" />
             <figcaption className="text-sm text-ink-2">{site.brand.name}</figcaption>
           </figure>
         </div>

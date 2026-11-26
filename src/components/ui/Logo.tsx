@@ -1,13 +1,28 @@
+import Image from 'next/image';
 import { useId } from 'react';
 import { cx } from '@/lib/format';
 
-/** The V on its red field, flat, exactly as the app icon draws it (assets/app-icons, RedField). */
-export function LogoMark({ className }: { className?: string }) {
+/**
+ * The app icon — the arrow and the walker — exactly as a phone shows it: the
+ * PNGs the app's `npm run icons:app` writes into `public/` from the default
+ * launcher icon, corners already rounded. `large` for anything drawn bigger
+ * than about 90 px, so a sharp screen gets enough pixels.
+ */
+export function LogoMark({ className, large = false }: { className?: string; large?: boolean }) {
+  const size = large ? 512 : 192;
   return (
-    <svg viewBox="0 0 1024 1024" className={cx('shrink-0', className)} aria-hidden="true">
-      <rect width="1024" height="1024" rx="232" fill="#e50000" />
-      <polygon points="235,239 398,239 448,614 636,239 809,239 540,785 306,785" fill="#fff" />
-    </svg>
+    <Image
+      src={`/icon-${size}.png`}
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={size}
+      unoptimized
+      // The header's is on screen at once; the big one sits far down the page.
+      loading={large ? 'lazy' : 'eager'}
+      draggable={false}
+      className={cx('shrink-0', className)}
+    />
   );
 }
 

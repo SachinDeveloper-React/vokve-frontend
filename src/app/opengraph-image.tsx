@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { ImageResponse } from 'next/og';
 import { getSiteConfig } from '@/lib/content';
 
@@ -8,6 +10,8 @@ export const contentType = 'image/png';
 /** The card shared links show: the flat app icon, the name and the tagline on the site's paper. */
 export default async function OpengraphImage() {
   const site = await getSiteConfig();
+  // The app icon the header shows, read from disk as Next's own examples do.
+  const icon = `data:image/png;base64,${(await readFile(join(process.cwd(), 'public/icon-192.png'))).toString('base64')}`;
   return new ImageResponse(
     (
       <div
@@ -24,10 +28,7 @@ export default async function OpengraphImage() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <svg width="88" height="88" viewBox="0 0 1024 1024">
-            <rect width="1024" height="1024" rx="232" fill="#e50000" />
-            <polygon points="235,239 398,239 448,614 636,239 809,239 540,785 306,785" fill="#fff" />
-          </svg>
+          <img src={icon} width={88} height={88} alt="" />
           <div style={{ fontSize: 48, fontWeight: 600, letterSpacing: 1 }}>{site.brand.name}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
