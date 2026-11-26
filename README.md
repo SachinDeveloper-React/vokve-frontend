@@ -19,28 +19,33 @@ npm run lint
 
 ## Where the content comes from
 
-**Every word and number on the site comes from the backend.** Until the
-backend serves `/v1/site/*`, it comes from the mock files in
-`src/content/mock/`, which are validated against the same schemas.
+**Every word and number on the site comes from the backend,** and is edited
+on the CRM's **Website** pages (RULES P22): the header and footer, Home (How it
+works, Features, Challenges, Fair play…), About, FAQ, Contact and its form,
+the legal hub, account deletion, licences, the invite page, and every policy —
+including new ones created on the panel, served at their own address by
+`app/[slug]`. The contact form's messages land on the CRM's **Enquiries** page.
 
 ```bash
 cp .env.example .env.local
-# VOKVE_CONTENT_API_URL=http://localhost:3000/v1   → read the backend
-# (leave it empty)                                 → read the mocks
-# VOKVE_API_URL=http://localhost:3000/v1           → live contact details only
+# VOKVE_CONTENT_API_URL=http://localhost:3000/v1   → read the backend (production)
+# (leave it empty)                                 → read the mocks (design work)
+# VOKVE_API_URL=http://localhost:3000/v1           → with the mocks: live contact details only
+# CONTENT_REVALIDATE_SECRET=…                      → the backend's SITE_REVALIDATE_SECRET
 ```
 
 The contact details — support email, phone, WhatsApp, address, store links,
-social profiles — are already live: the CRM's **Contact & links** page edits
-them, the backend serves them at `GET /v1/site/company`, and every page folds
-them in (copy says `{{email}}`, never the address itself).
+social profiles — are on the CRM's **Contact & links** page, served at
+`GET /v1/site/company`, and folded into every page (copy says `{{email}}`,
+never the address itself).
 
-The full contract — endpoints, shapes, which backend config each value should
-come from, and the revalidation webhook — is in
-[docs/CONTENT_API.md](docs/CONTENT_API.md).
+The full contract — endpoints, shapes, what the backend fills in, the contact
+form and the revalidation webhook — is in [docs/CONTENT_API.md](docs/CONTENT_API.md).
+The mock files in `src/content/mock/` are a snapshot of the shipped copy for
+working without a backend; they are not kept in step with the panel.
 
-> The legal texts in `src/content/mock/legal/` are drafts written from what the
-> app and backend actually do. Have them reviewed before publishing.
+> The policies are drafts written from what the app and backend actually do.
+> Have them reviewed by a lawyer before relying on them.
 
 ## Design: the morning walk
 

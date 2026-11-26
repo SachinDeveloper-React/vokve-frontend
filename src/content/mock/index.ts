@@ -1,7 +1,10 @@
 /**
- * Mock content — what the site shows until `VOKVE_CONTENT_API_URL` points at
- * a backend that serves `/site/*`. Each export matches one endpoint in
- * docs/CONTENT_API.md and is validated by the same schema as the real thing.
+ * Mock content — what the site shows with no `VOKVE_CONTENT_API_URL`, for
+ * working on the design without a backend. The real copy lives on the
+ * backend now (`vokve-backend/src/modules/site/defaults`, edited on the
+ * panel's Website pages, RULES P22); these are a snapshot of it and are not
+ * kept in step. Each export matches one endpoint in docs/CONTENT_API.md and is
+ * validated by the same schema as the real thing.
  */
 import { privacyPolicy } from './legal/privacy';
 import { termsAndConditions } from './legal/terms';

@@ -23,6 +23,13 @@ const LIVE_API_URL = API_URL ?? (process.env.VOKVE_API_URL?.trim().replace(/\/+$
 
 export const contentSource: 'api' | 'mock' = API_URL ? 'api' : 'mock';
 
+/**
+ * The backend's `/v1` base for the one thing the site *sends*: the contact
+ * form (`POST /site/contact`). Null with neither variable set, and then the
+ * form says it could not send rather than pretending it did.
+ */
+export const backendBase: string | null = LIVE_API_URL;
+
 const TIMEOUT_MS = 10_000;
 
 export class ContentError extends Error {

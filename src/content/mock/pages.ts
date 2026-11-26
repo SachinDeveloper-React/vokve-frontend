@@ -64,6 +64,24 @@ export const contactPage = {
   companyTitle: 'Company details',
   grievanceNote:
     'Complaints about your data or an order can be sent to our Grievance Officer. We acknowledge them within 24 hours and aim to resolve them within 30 days.',
+  form: {
+    title: 'Send us a message',
+    subtitle: 'Not a member yet, or writing about something other than your account? Tell us here and a person will reply by email.',
+    nameLabel: 'Your name',
+    emailLabel: 'Email',
+    phoneLabel: 'Phone (optional)',
+    topicLabel: 'What is it about?',
+    topics: ['A question about VOKVE', 'Coins and rewards', 'An order', 'My account', 'Privacy or my data', 'Business or press', 'Something else'],
+    messageLabel: 'Your message',
+    messagePlaceholder: 'Tell us as much as you can — an order number or the email on your account helps.',
+    consent: 'We use these details only to answer you. See our [Privacy Policy](/privacy).',
+    submitLabel: 'Send message',
+    sendingLabel: 'Sending…',
+    successTitle: 'Thanks — your message is with us',
+    successBody: 'A person will read it and reply to the email you gave. {{responseTime}}',
+    errorBody: 'Your message could not be sent just now. Please try again in a minute, or email us at [{{email}}](mailto:{{email}}).',
+    rateLimitedBody: 'You have sent us several messages already today. We will answer those first — or email us at [{{email}}](mailto:{{email}}).',
+  },
 } satisfies z.input<typeof contactPageSchema>;
 
 /** MOCK — `GET /site/legal`, the hub that lists every document. */

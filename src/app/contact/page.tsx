@@ -1,8 +1,11 @@
 import { ArrowUpRight, Building2, Clock, ShieldCheck } from 'lucide-react';
 import type { Metadata } from 'next';
+import { ContactForm } from '@/components/client/ContactForm';
 import { PageHero, PathChips } from '@/components/ui/blocks';
 import { Icon } from '@/components/ui/Icon';
+import { RichText } from '@/components/ui/RichText';
 import { SmartLink } from '@/components/ui/SmartLink';
+import { cx } from '@/lib/format';
 import { getContactPage, getSiteConfig } from '@/lib/content';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -60,7 +63,10 @@ export default async function ContactPage() {
       </section>
 
       <section className="section pt-10">
-        <div className="container-x grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+        <div className={cx('container-x grid grid-cols-1 items-start gap-6', page.form ? 'lg:grid-cols-[1.35fr_1fr]' : 'lg:grid-cols-2')}>
+          {page.form ? <ContactFormCard form={page.form} /> : null}
+
+          <div className={cx('grid gap-6', !page.form && 'contents')}>
           <article className="card p-6 sm:p-9">
             <h2 className="text-2xl font-medium text-ink">{page.inApp.title}</h2>
             <p className="mt-3 leading-relaxed text-ink-2">{page.inApp.body}</p>
@@ -101,8 +107,29 @@ export default async function ContactPage() {
               </div>
             ) : null}
           </article>
+          </div>
         </div>
       </section>
     </>
+  );
+}
+
+/** The form's card: its words from the backend, the linkable ones rendered here. */
+function ContactFormCard({ form }: { form: NonNullable<Awaited<ReturnType<typeof getContactPage>>['form']> }) {
+  const { consent, successBody, errorBody, rateLimitedBody, ...copy } = form;
+  return (
+    <article id="message" className="card scroll-mt-24 p-6 sm:p-9">
+      <h2 className="text-2xl font-medium text-ink">{form.title}</h2>
+      {form.subtitle ? <p className="mt-3 leading-relaxed text-ink-2">{form.subtitle}</p> : null}
+      <div className="mt-8">
+        <ContactForm
+          copy={copy}
+          consent={consent ? <RichText text={consent} /> : null}
+          success={<RichText text={successBody} />}
+          failure={<RichText text={errorBody} />}
+          limited={<RichText text={rateLimitedBody} />}
+        />
+      </div>
+    </article>
   );
 }

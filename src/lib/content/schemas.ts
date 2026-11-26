@@ -2,9 +2,12 @@
  * The content contract between this site and the VOKVE backend.
  *
  * Every word and number the site shows arrives through one of these shapes,
- * from `GET {VOKVE_CONTENT_API_URL}/site/...` — or, until the backend serves
- * those routes, from the mock files in `src/content/mock`, which are parsed
- * through the very same schemas so they cannot drift from the contract.
+ * from `GET {VOKVE_CONTENT_API_URL}/site/...` — served by the backend and
+ * edited on the panel's Website pages (RULES P22) — or, with no API set, from
+ * the mock files in `src/content/mock`, which are parsed through the very
+ * same schemas so they cannot drift from the contract. The backend holds its
+ * own copy of these shapes (`vokve-backend/src/contracts/site.ts`) and checks
+ * every answer against it before it is sent.
  *
  * Two rules shape it, both borrowed from how the app reads its config:
  *
@@ -500,8 +503,37 @@ export const contactPageSchema = z.object({
   inApp: z.object({ title: z.string(), body: z.string(), path: z.array(z.string()) }),
   companyTitle: z.string(),
   grievanceNote: z.string().nullable(),
+  /**
+   * The contact form's words (RULES P22). Its messages go to the backend's
+   * `POST /site/contact` and land on the panel's Enquiries page. Null — or a
+   * backend from before the form — leaves the form out.
+   */
+  form: z
+    .object({
+      title: z.string().min(1),
+      subtitle: z.string().nullable(),
+      nameLabel: z.string().min(1),
+      emailLabel: z.string().min(1),
+      /** Null leaves the phone box out. */
+      phoneLabel: z.string().nullable(),
+      topicLabel: z.string().min(1),
+      topics: z.array(z.string().min(1)).min(1),
+      messageLabel: z.string().min(1),
+      messagePlaceholder: z.string().nullable(),
+      /** Small print under the button; inline marks allowed. */
+      consent: z.string().nullable(),
+      submitLabel: z.string().min(1),
+      sendingLabel: z.string().min(1),
+      successTitle: z.string().min(1),
+      successBody: z.string(),
+      errorBody: z.string(),
+      rateLimitedBody: z.string(),
+    })
+    .nullable()
+    .default(null),
 });
 export type ContactPage = z.infer<typeof contactPageSchema>;
+export type ContactFormCopy = NonNullable<ContactPage['form']>;
 
 // ─── GET /site/pages/licenses ───────────────────────────────────────────────
 
